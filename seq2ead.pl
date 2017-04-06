@@ -194,31 +194,32 @@ my %language = (
 
 # Define hashes with information exported out of the .seq file (hash key = system number)
 my (
-    %title,            %alttitle,        %alttitleintro,
-    %ausreifung,       %music,           %date,
-    %datenorm,         %datenormhuman,   %date008,
-    %date008human,     %size,            %dimension,
-    %carrier,          %arrangement,     %restrict,
-    %content,          %contentform,     %bibliography,
-    %level,            %link,            %note,
-    %noteA,            %acqinfo,         %relatedmat,
-    %bioghist,         %findaid,         %custodhist,
-    %einband,          %literatur,       %institution,
-    %institutionname,  %signature,       %signaturealt,
-    %signatureold,     %isilsysnum,      %isilnum,
-    %languages,        %langcodes,       %controlper,
-    %controlpernorm,   %controlpergnd,   %controlperfamily,
-    %controlkorp,      %controlkorpnorm, %controlkorpgnd,
-    %controlkong,      %controlkongnorm, %controlkonggnd,
-    %controlsub,       %controlsubnorm,  %controlsubgnd,
-    %controlgeo,       %controlgeonorm,  %controlgeognd,
-    %controlgenre,     %nebenper,        %nebenpernorm,
-    %nebenpergnd,      %nebenperrelator, %nebenkorp,
-    %nebenkorpnorm,    %nebenkorpgnd,    %nebenkorprelator,
-    %nebenkong,        %nebenkongnorm,   %nebenkonggnd,
-    %nebenkongrelator, %originationa,    %originationgnd,
-    %hyperlink,        %hyperlinknote,   %hide,
-    %catdate,          %catdatehuman,    %sysnumcheck
+    %date008,          %date008_hum,     %f046,
+    %f046_hum,         %f245,            %f246,
+    %f246i,            %f250,            %f254,
+    %f260,             %f300,            %f300c,
+    %f340,             %f351a,           %f351c,
+    %f490,             %f500,            %f505,
+    %f506,             %f510,            %f520,
+    %f525,             %f541,            %f544,
+    %f545,             %f555,            %f561,
+    %f563,             %f581,            %f600,
+    %f600a,            %f600c,           %f6001,
+    %f610,             %f610a,           %f6101,
+    %f611,             %f611a,           %f6111,
+    %f650,             %f650a,           %f6501,
+    %f651,             %f651a,           %f6511,
+    %f655,             %f700,            %f700a,
+    %f700e,            %f7001,           %f710,
+    %f710a,            %f710e,           %f7101,
+    %f711,             %f711a,           %f711j,
+    %f7111,            %f751a,           %f7511,
+    %f773,             %f852,            %f852a,
+    %f852p,            %f852Ap,          %f852Ep,
+    %f856u,            %f856z,           %f909,
+    %isilsysnum,       %isilnum,         %languages,
+    %langcodes,        %catdate,         %catdatehuman,
+    %sysnumcheck
 );
 
 # Sysnum-Array contains all the system numbers of all MARC records
@@ -230,418 +231,166 @@ $importer->each(
     sub {
         my $data          = $_[0];
         my $sysnum        = $data->{'_id'};
-        my $title         = marc_map( $data, '245a' );
-        my $titleb        = marc_map( $data, '245b', '-join', ', ' );
-        my $titlec        = marc_map( $data, '245c', '-join', ', ' );
-        my $titled        = marc_map( $data, '245d', '-join', ', ' );
-        my $titlei        = marc_map( $data, '245i', '-join', ', ' );
-        my $titlej        = marc_map( $data, '245j', '-join', ', ' );
-        my $titlen        = marc_map( $data, '245n', '-join', ', ' );
-        my $titlep        = marc_map( $data, '245p', '-join', ', ' );
-        my @alttitlea     = marc_map( $data, '246a' );
-        my @alttitlen     = marc_map( $data, '246n', '-join', ', ' );
-        my @alttitlep     = marc_map( $data, '246p', '-join', ', ' );
-        my @alttitleintro = marc_map( $data, '246i' );
-        my $ausreifung    = marc_map( $data, '250a' );
-        my @music         = marc_map( $data, '254a' );
-        my $date          = marc_map( $data, '260c' );
-        my $sizea         = marc_map( $data, '300a', '-join', ', ' );
-        my $sizee         = marc_map( $data, '300e' );
-        my $dimension     = marc_map( $data, '300c', '-join', ', ' );
-        my @carrier       = marc_map( $data, '340a', '-join', ', ' );
-        my $arrangement   = marc_map( $data, '351a' );
-        my $level         = marc_map( $data, '351c' );
-        my @note          = marc_map( $data, '500[  ]a' );
-        my @noteA         = marc_map( $data, '525a' );
-        my @contenta      = marc_map( $data, '505a' );
-        my @contentn      = marc_map( $data, '505n' );
-        my @contentg      = marc_map( $data, '505g' );
-        my @contentt      = marc_map( $data, '505t' );
-        my @contentr      = marc_map( $data, '505r' );
-        my @contenti      = marc_map( $data, '505i' );
-        my @contents      = marc_map( $data, '505s' );
-        my @contentv      = marc_map( $data, '505v', '-join', ', ' );
-        my @contentforma  = marc_map( $data, '520a' );
-        my @contentformb  = marc_map( $data, '520b', '-join', ', ' );
-        my @contentform3  = marc_map( $data, '5203' );
-        my @restricta     = marc_map( $data, '506a' );
-        my @restrictc     = marc_map( $data, '506c' );
-        my @bibliographya = marc_map( $data, '510a' );
-        my @bibliographyi = marc_map( $data, '510i' );
-        my @acqinfo3      = marc_map( $data, '5413' );
-        my @acqinfoc      = marc_map( $data, '541c' );
-        my @acqinfoa      = marc_map( $data, '541a' );
-        my @acqinfod      = marc_map( $data, '541d' );
-        my @acqinfoe      = marc_map( $data, '541e' );
-        my @acqinfof      = marc_map( $data, '541f' );
-        my @relatedmat    = marc_map( $data, '544n' );
-        my @bioghista     = marc_map( $data, '545a' );
-        my @bioghistb     = marc_map( $data, '545b', '-join', ', ' );
-        my @findaid       = marc_map( $data, '555a' );
-        my @custodhist    = marc_map( $data, '561a' );
-        my @einband       = marc_map( $data, '563a' );
-        my @literaturi    = marc_map( $data, '581i' );
-        my @literatura    = marc_map( $data, '581a' );
-        my @literatur3    = marc_map( $data, '5813', '-join', ', ' );
-        my @datenorma     = marc_map( $data, '046a' );
-        my @datenormb     = marc_map( $data, '046b' );
-        my @datenormc     = marc_map( $data, '046c' );
-        my @datenormd     = marc_map( $data, '046d' );
-        my @datenorme     = marc_map( $data, '046e' );
-        my @controlpera   = marc_map( $data, '600a' );
-        my @controlperq   = marc_map( $data, '600q' );
-        my @controlperb   = marc_map( $data, '600b' );
-        my @controlperc   = marc_map( $data, '600c', '-join', ', ' );
-        my @controlperd   = marc_map( $data, '600d' );
-        my @controlpergnd = marc_map( $data, '6001' );
-        for (@controlpergnd) { s/\(DE-588\)//g }
-        my @controlkorpa   = marc_map( $data, '610a' );
-        my @controlkorpb   = marc_map( $data, '610b', '-join', ', ' );
-        my @controlkorpgnd = marc_map( $data, '6101' );
-        for (@controlkorpgnd) { s/\(DE-588\)//g }
-        my @controlkonga   = marc_map( $data, '611a' );
-        my @controlkonge   = marc_map( $data, '611e', '-join', ', ' );
-        my @controlkonggnd = marc_map( $data, '6111' );
-        for (@controlkonggnd) { s/\(DE-588\)//g }
-        my @controlsuba   = marc_map( $data, '650[ 7]a' );
-        my @controlsubv   = marc_map( $data, '650[ 7]v', '-join', ', ' );
-        my @controlsubx   = marc_map( $data, '650[ 7]x', '-join', ', ' );
-        my @controlsuby   = marc_map( $data, '650[ 7]y', '-join', ', ' );
-        my @controlsubz   = marc_map( $data, '650[ 7]z', '-join', ', ' );
-        my @controlsubgnd = marc_map( $data, '650[ 7]1' );
-        for (@controlsubgnd) { s/\(DE-588\)//g }
-        my @controlgeoa   = marc_map( $data, '651[ 7]a' );
-        my @controlgeov   = marc_map( $data, '651[ 7]v', '-join', ', ' );
-        my @controlgeox   = marc_map( $data, '651[ 7]x', '-join', ', ' );
-        my @controlgeoy   = marc_map( $data, '651[ 7]y', '-join', ', ' );
-        my @controlgeoz   = marc_map( $data, '651[ 7]z', '-join', ', ' );
-        my @controlgeognd = marc_map( $data, '651[ 7]1' );
-        for (@controlgeognd) { s/\(DE-588\)//g }
-        my @controlgenre  = marc_map( $data, '655[ 7]a' );
-        my @nebenpera     = marc_map( $data, '700a' );
-        my @nebenperq     = marc_map( $data, '700q' );
-        my @nebenperb     = marc_map( $data, '700b' );
-        my @nebenperc     = marc_map( $data, '700c', '-join', ', ' );
-        my @nebenperd     = marc_map( $data, '700d' );
-        my @nebenpert     = marc_map( $data, '700t' );
-        my @nebenpern     = marc_map( $data, '700n', '-join', ', ' );
-        my @nebenperp     = marc_map( $data, '700p', '-join', ', ' );
-        my @nebenperm     = marc_map( $data, '700m', '-join', ', ' );
-        my @nebenperr     = marc_map( $data, '700r' );
-        my @nebenpers     = marc_map( $data, '700s' );
-        my @nebenpero     = marc_map( $data, '700o' );
-        my @nebenperh     = marc_map( $data, '700h' );
-        my @nebenperrelator = marc_map( $data, '700e' );
-        my @nebenpergnd     = marc_map( $data, '7001' );
-        my @nebenkorpa   = marc_map( $data, '710a' );
-        my @nebenkorpb   = marc_map( $data, '710b', '-join', ', ' );
-        my @nebenkorpgnd = marc_map( $data, '7101' );
-        my @nebenkorprelator = marc_map( $data, '710e' );
-        my @nebenkonga       = marc_map( $data, '711a' );
-        my @nebenkonge       = marc_map( $data, '711e', '-join', ', ' );
-        my @nebenkonggnd     = marc_map( $data, '7111' );
-        my @nebenkongrelator = marc_map( $data, '711j' );
+        my $f008          = marc_map( $data, '008' );
+        my $language008   = substr( $f008, 35, 3 );
+        my $date0081      = substr( $f008, 7,  4 );
+        my $date0082      = substr( $f008, 11, 4 );
+        my $f041          = marc_map( $data, '041a' );
+        my @f046a         = marc_map( $data, '046a' );
+        my @f046b         = marc_map( $data, '046b' );
+        my @f046c         = marc_map( $data, '046c' );
+        my @f046d         = marc_map( $data, '046d' );
+        my @f046e         = marc_map( $data, '046e' );
+        my $f245a         = marc_map( $data, '245a' );
+        my $f245b         = marc_map( $data, '245b', '-join', ', ' );
+        my $f245c         = marc_map( $data, '245c', '-join', ', ' );
+        my $f245d         = marc_map( $data, '245d', '-join', ', ' );
+        my $f245i         = marc_map( $data, '245i', '-join', ', ' );
+        my $f245j         = marc_map( $data, '245j', '-join', ', ' );
+        my $f245n         = marc_map( $data, '245n', '-join', ', ' );
+        my $f245p         = marc_map( $data, '245p', '-join', ', ' );
+        my @f246a         = marc_map( $data, '246a' );
+        my @f246n         = marc_map( $data, '246n', '-join', ', ' );
+        my @f246p         = marc_map( $data, '246p', '-join', ', ' );
+        my @f246i         = marc_map( $data, '246i' );
+        my $f250          = marc_map( $data, '250a' );
+        my @f254          = marc_map( $data, '254a' );
+        my $f260          = marc_map( $data, '260c' );
+        my $f300a         = marc_map( $data, '300a', '-join', ', ' );
+        my $f300e         = marc_map( $data, '300e' );
+        my $f300c         = marc_map( $data, '300c', '-join', ', ' );
+        my @f340          = marc_map( $data, '340a', '-join', ', ' );
+        my $f351a         = marc_map( $data, '351a' );
+        my $f351c         = marc_map( $data, '351c' );
+        my $f490          = marc_map( $data, '490w' );
+        my @f500          = marc_map( $data, '500[  ]a' );
+        my @f505a         = marc_map( $data, '505a' );
+        my @f505n         = marc_map( $data, '505n' );
+        my @f505g         = marc_map( $data, '505g' );
+        my @f505t         = marc_map( $data, '505t' );
+        my @f505r         = marc_map( $data, '505r' );
+        my @f505i         = marc_map( $data, '505i' );
+        my @f505s         = marc_map( $data, '505s' );
+        my @f506a         = marc_map( $data, '506a' );
+        my @f506c         = marc_map( $data, '506c' );
+        my @f510a         = marc_map( $data, '510a' );
+        my @f510i         = marc_map( $data, '510i' );
+        my @f505v         = marc_map( $data, '505v', '-join', ', ' );
+        my @f520a         = marc_map( $data, '520a' );
+        my @f520b         = marc_map( $data, '520b', '-join', ', ' );
+        my @f5203         = marc_map( $data, '5203' );
+        my @f525          = marc_map( $data, '525a' );
+        my @f5413         = marc_map( $data, '5413' );
+        my @f541c         = marc_map( $data, '541c' );
+        my @f541a         = marc_map( $data, '541a' );
+        my @f541d         = marc_map( $data, '541d' );
+        my @f541e         = marc_map( $data, '541e' );
+        my @f541f         = marc_map( $data, '541f' );
+        my @f544          = marc_map( $data, '544n' );
+        my @f545a         = marc_map( $data, '545a' );
+        my @f545b         = marc_map( $data, '545b', '-join', ', ' );
+        my @f555          = marc_map( $data, '555a' );
+        my @f561          = marc_map( $data, '561a' );
+        my @f563          = marc_map( $data, '563a' );
+        my @f581i         = marc_map( $data, '581i' );
+        my @f581a         = marc_map( $data, '581a' );
+        my @f5813         = marc_map( $data, '5813', '-join', ', ' );
+        my @f600a         = marc_map( $data, '600a' );
+        my @f600q         = marc_map( $data, '600q' );
+        my @f600b         = marc_map( $data, '600b' );
+        my @f600c         = marc_map( $data, '600c', '-join', ', ' );
+        my @f600d         = marc_map( $data, '600d' );
+        my @f6001         = marc_map( $data, '6001' );
+        my @f610a         = marc_map( $data, '610a' );
+        my @f610b         = marc_map( $data, '610b', '-join', ', ' );
+        my @f6101         = marc_map( $data, '6101' );
+        my @f611a         = marc_map( $data, '611a' );
+        my @f611e         = marc_map( $data, '611e', '-join', ', ' );
+        my @f6111         = marc_map( $data, '6111' );
+        my @f650a         = marc_map( $data, '650[ 7]a' );
+        my @f650v         = marc_map( $data, '650[ 7]v', '-join', ', ' );
+        my @f650x         = marc_map( $data, '650[ 7]x', '-join', ', ' );
+        my @f650y         = marc_map( $data, '650[ 7]y', '-join', ', ' );
+        my @f650z         = marc_map( $data, '650[ 7]z', '-join', ', ' );
+        my @f6501         = marc_map( $data, '650[ 7]1' );
+        my @f651a         = marc_map( $data, '651[ 7]a' );
+        my @f651v         = marc_map( $data, '651[ 7]v', '-join', ', ' );
+        my @f651x         = marc_map( $data, '651[ 7]x', '-join', ', ' );
+        my @f651y         = marc_map( $data, '651[ 7]y', '-join', ', ' );
+        my @f651z         = marc_map( $data, '651[ 7]z', '-join', ', ' );
+        my @f6511         = marc_map( $data, '651[ 7]1' );
+        my @f655          = marc_map( $data, '655[ 7]a' );
+        my @f700a         = marc_map( $data, '700a' );
+        my @f700q         = marc_map( $data, '700q' );
+        my @f700b         = marc_map( $data, '700b' );
+        my @f700c         = marc_map( $data, '700c', '-join', ', ' );
+        my @f700d         = marc_map( $data, '700d' );
+        my @f700e         = marc_map( $data, '700e' );
+        my @f700t         = marc_map( $data, '700t' );
+        my @f700n         = marc_map( $data, '700n', '-join', ', ' );
+        my @f700p         = marc_map( $data, '700p', '-join', ', ' );
+        my @f700m         = marc_map( $data, '700m', '-join', ', ' );
+        my @f700r         = marc_map( $data, '700r' );
+        my @f700s         = marc_map( $data, '700s' );
+        my @f700o         = marc_map( $data, '700o' );
+        my @f700h         = marc_map( $data, '700h' );
+        my @f7001         = marc_map( $data, '7001' );
+        my @f710a         = marc_map( $data, '710a' );
+        my @f710b         = marc_map( $data, '710b', '-join', ', ' );
+        my @f7101         = marc_map( $data, '7101' );
+        my @f710e         = marc_map( $data, '710e' );
+        my @f711a         = marc_map( $data, '711a' );
+        my @f711e         = marc_map( $data, '711e', '-join', ', ' );
+        my @f7111         = marc_map( $data, '7111' );
+        my @f711j         = marc_map( $data, '711j' );
 
+        #Fields 100, 110 and 111 are treated like 7##-fields and are therefore shifted into these arrays
         if ( marc_map( $data, '100' ) ne "" ) {
-            unshift @nebenpera,       marc_map( $data, '100a' );
-            unshift @nebenperq,       marc_map( $data, '100q' );
-            unshift @nebenperb,       marc_map( $data, '100b' );
-            unshift @nebenperc,       marc_map( $data, '100c', '-join', ', ' );
-            unshift @nebenperd,       marc_map( $data, '100d' );
-            unshift @nebenpert,       undef;
-            unshift @nebenpern,       undef;
-            unshift @nebenperp,       undef;
-            unshift @nebenperm,       undef;
-            unshift @nebenperr,       undef;
-            unshift @nebenpers,       undef;
-            unshift @nebenpero,       undef;
-            unshift @nebenperh,       undef;
-            unshift @nebenperrelator, marc_map( $data, '100e' );
-            unshift @nebenpergnd,     marc_map( $data, '1001' );
+            unshift @f700a,       marc_map( $data, '100a' );
+            unshift @f700q,       marc_map( $data, '100q' );
+            unshift @f700b,       marc_map( $data, '100b' );
+            unshift @f700c,       marc_map( $data, '100c', '-join', ', ' );
+            unshift @f700d,       marc_map( $data, '100d' );
+            unshift @f700e,       marc_map( $data, '100e' );
+            unshift @f700t,       undef;
+            unshift @f700n,       undef;
+            unshift @f700p,       undef;
+            unshift @f700m,       undef;
+            unshift @f700r,       undef;
+            unshift @f700s,       undef;
+            unshift @f700o,       undef;
+            unshift @f700h,       undef;
+            unshift @f7001,       marc_map( $data, '1001' );
         }
 
-        for (@nebenpergnd) { s/\(DE-588\)//g }
         if ( marc_map( $data, '110' ) ne "" ) {
-            unshift @nebenkorpa,       marc_map( $data, '110a' );
-            unshift @nebenkorpb,       marc_map( $data, '110b', '-join', ', ' );
-            unshift @nebenkorpgnd,     marc_map( $data, '1101' );
-            unshift @nebenkorprelator, marc_map( $data, '110e' );
+            unshift @f710a,       marc_map( $data, '110a' );
+            unshift @f710b,       marc_map( $data, '110b', '-join', ', ' );
+            unshift @f710e,       marc_map( $data, '110e' );
+            unshift @f7101,       marc_map( $data, '1101' );
         }
 
-        for (@nebenkorpgnd) { s/\(DE-588\)//g }
         if ( marc_map( $data, '111' ) ne "" ) {
-            unshift @nebenkonga,       marc_map( $data, '111a' );
-            unshift @nebenkonge,       marc_map( $data, '111e', '-join', ', ' );
-            unshift @nebenkonggnd,     marc_map( $data, '1111' );
-            unshift @nebenkongrelator, marc_map( $data, '111j' );
+            unshift @f711a,       marc_map( $data, '111a' );
+            unshift @f711e,       marc_map( $data, '111e', '-join', ', ' );
+            unshift @f7111,       marc_map( $data, '1111' );
+            unshift @f711j,       marc_map( $data, '111j' );
         }
 
-        for (@nebenkonggnd) { s/\(DE-588\)//g }
-        my @originationa   = marc_map( $data, '751a' );
-        my @originationgnd = marc_map( $data, '7511' );
-        for (@originationgnd) { s/\(DE-588\)//g }
-        my $institution     = marc_map( $data, '852' );
-        my @institutionname = marc_map( $data, '852[  ]a' );
-        my @signature       = marc_map( $data, '852[  ]p' );
-        my @signaturealt    = marc_map( $data, '852[A ]p' );
-        my @signatureold    = marc_map( $data, '852[E ]p' );
-        my @hyperlink       = marc_map( $data, '856u' );
-        my @hyperlinknote   = marc_map( $data, '856z' );
-        my $link            = marc_map( $data, '490w' );
-        my $alink           = marc_map( $data, '773w' );
-        my $fixedfields     = marc_map( $data, '008' );
-        my $language008 = substr( $fixedfields, 35, 3 );
-        my $date0081    = substr( $fixedfields, 7,  4 );
-        my $date0082    = substr( $fixedfields, 11, 4 );
-        my $language041 = marc_map( $data, '041a' );
-        my $hide        = marc_map( $data, '909f' );
-        my @catdate     = marc_map( $data, 'CATc' );
+        my @f751a           = marc_map( $data, '751a' );
+        my @f7511           = marc_map( $data, '7511' );
+        my $f852            = marc_map( $data, '852[  ]' );
+        my @f852a           = marc_map( $data, '852[  ]a' );
+        my @f852p           = marc_map( $data, '852[  ]p' );
+        my @f852Ap          = marc_map( $data, '852[A ]p' );
+        my @f852Ep          = marc_map( $data, '852[E ]p' );
+        my @f856u           = marc_map( $data, '856u' );
+        my @f856z           = marc_map( $data, '856z' );
+        my $f773            = marc_map( $data, '773w' );
+        my $f909            = marc_map( $data, '909f' );
+        my @catdate         = marc_map( $data, 'CATc' );
 
-        isbd( $title, $titleb, " : " );
-        isbd( $title, $titled, " = " );
-        isbd( $title, $titlec, " / " );
-        isbd( $title, $titlei, " ; " );
-        isbd( $title, $titlej, ". " );
-        isbd( $title, $titlen, ". " );
-        isbd( $title, $titlep, ". " );
-
-        for my $i ( 0 .. (@alttitlea) - 1 ) {
-            if ( !( hasvalue( $alttitleintro[$i] ) ) ) {
-                $alttitleintro[$i] = "Weiterer Titel";
-            }
-        }
-
-        my @alttitle;
-        my $alttitle_max = maxarray( \@alttitlea, \@alttitlen, \@alttitlep );
-        for my $i ( 0 .. ($alttitle_max) - 1 ) {
-            isbd( $alttitle[$i], $alttitlea[$i] );
-            isbd( $alttitle[$i], $alttitlen[$i], ". " );
-            isbd( $alttitle[$i], $alttitlep[$i], ". " );
-            $alttitle[$i] =~ s/^.\s//;
-        }
-
-        my $size = $sizea;
-        isbd( $size, $sizee, " + " );
-
-        my @restrict;
-        my $restrict_max = maxarray( \@restricta, \@restrictc );
-        for my $i ( 0 .. ($restrict_max) - 1 ) {
-            isbd( $restrict[$i], $restricta[$i] );
-            isbd( $restrict[$i], $restrictc[$i], ". " );
-            $restrict[$i] =~ s/^,\s//;
-        }
-
-        my @bibliography;
-        my $bibliography_max = maxarray( \@bibliographya, \@bibliographyi );
-        for my $i ( 0 .. ($bibliography_max) - 1 ) {
-            isbd( $bibliography[$i], $bibliographyi[$i], ": " );
-            isbd( $bibliography[$i], $bibliographya[$i] );
-        }
-
-        my @content;
-        my $content_max = maxarray(
-            \@contenta, \@contentn, \@contentg, \@contentt,
-            \@contentr, \@contenti, \@contents, \@contentv
-        );
-        for my $i ( 0 .. ($content_max) - 1 ) {
-            if ( hasvalue( $contenta[$i] ) ) { $content[$i] = $contenta[$i] }
-            else {
-                isbd( $content[$i], $contentn[$i] );
-                isbd( $content[$i], $contentg[$i], ". (", ")" );
-                isbd( $content[$i], $contentt[$i], " " );
-                isbd( $content[$i], $contentr[$i], " / " );
-                isbd( $content[$i], $contenti[$i], ". " );
-                isbd( $content[$i], $contents[$i], " " );
-                isbd( $content[$i], $contentv[$i], " - " );
-            }
-            $content[$i] =~ s/^,\s//;
-        }
-
-        my @contentform;
-        my $contentform_max =
-          maxarray( \@contentforma, \@contentformb, \@contentform3 );
-        for my $i ( 0 .. ($contentform_max) - 1 ) {
-            isbd( $contentform[$i], $contentform3[$i], "", ": " );
-            isbd( $contentform[$i], $contentforma[$i] );
-            isbd( $contentform[$i], $contentformb[$i], ". " );
-            $contentform[$i] =~ s/^,\s//;
-        }
-
-        my @acqinfo;
-        my $acqinfo_max = maxarray(
-            \@acqinfo3, \@acqinfoc, \@acqinfoa,
-            \@acqinfod, \@acqinfoe, \@acqinfof
-        );
-        for my $i ( 0 .. ($acqinfo_max) - 1 ) {
-            isbd( $acqinfo[$i], $acqinfo3[$i], "",           ": " );
-            isbd( $acqinfo[$i], $acqinfoc[$i], "",           ". " );
-            isbd( $acqinfo[$i], $acqinfoa[$i], "Herkunft: ", ". " );
-            isbd( $acqinfo[$i], $acqinfod[$i], "Datum: ",    ". " );
-            isbd( $acqinfo[$i], $acqinfoe[$i], "Akz.-Nr.: ", ". " );
-            isbd( $acqinfo[$i], $acqinfof[$i], "Eigentümer: " );
-        }
-
-        my @literatur;
-        my $literatur_max =
-          maxarray( \@literaturi, \@literatura, \@literatur3 );
-        for my $i ( 0 .. ($literatur_max) - 1 ) {
-            isbd( $literatur[$i], $literaturi[$i], "",         ": " );
-            isbd( $literatur[$i], $literatura[$i] );
-            isbd( $literatur[$i], $literatur3[$i], " (betr. ", ")" );
-            $literatur[$i] =~ s/^,\s//;
-        }
-
-        my @bioghist;
-        my $bioghist_max = maxarray( \@bioghista, \@bioghistb );
-        for my $i ( 0 .. ($bioghist_max) - 1 ) {
-            $bioghist[$i] = $bioghista[$i];
-            isbd( $bioghist[$i], $bioghistb[$i], ". " );
-        }
-
-        my @datenormbhuman;
-        for (@datenormb) {
-            s/\.//g;
-            s/\[//g;
-            s/\]//g;
-            s/ //g;
-            push @datenormbhuman, $_;
-        }
-
-        my @datenormchuman;
-        for (@datenormc) {
-            s/\.//g;
-            s/\[//g;
-            s/\]//g;
-            s/ //g;
-            push @datenormchuman, $_;
-        }
-
-        my @datenormdhuman;
-        for (@datenormd) {
-            s/\.//g;
-            s/\[//g;
-            s/\]//g;
-            s/ //g;
-            push @datenormdhuman, $_;
-        }
-
-        my @datenormehuman;
-        for (@datenorme) {
-            s/\.//g;
-            s/\[//g;
-            s/\]//g;
-            s/ //g;
-            push @datenormehuman, $_;
-        }
-
-        my $datenorm_max =
-          maxarray( \@datenorma, \@datenormb, \@datenormc, \@datenormd,
-            \@datenorme );
-
-        my @datenormhuman;
-        my @datenorm;
-
-        for my $i ( 0 .. ($datenorm_max) - 1 ) {
-            if ( length( $datenormb[$i] ) == 6 ) {
-                $datenormbhuman[$i] = "v"
-                  . substr( $datenormbhuman[$i], 4, 2 ) . "."
-                  . substr( $datenormbhuman[$i], 0, 4 );
-                $datenormb[$i] = "-"
-                  . substr( $datenormb[$i], 0, 4 ) . "-"
-                  . substr( $datenormb[$i], 4, 2 );
-            }
-            elsif ( length( $datenormb[$i] ) == 8 ) {
-                $datenormbhuman[$i] = "v"
-                  . substr( $datenormbhuman[$i], 6, 2 ) . "."
-                  . substr( $datenormbhuman[$i], 4, 2 ) . "."
-                  . substr( $datenormbhuman[$i], 0, 4 );
-                $datenormb[$i] = "-" . $datenormb[$i];
-            }
-            elsif ( $datenormb[$i] ) {
-                $datenormbhuman[$i] = "v" . $datenormbhuman[$i];
-                $datenormb[$i]      = "-" . $datenormb[$i];
-            }
-
-            if ( length( $datenormc[$i] ) == 6 ) {
-                $datenormchuman[$i] = substr( $datenormchuman[$i], 4, 2 ) . "."
-                  . substr( $datenormchuman[$i], 0, 4 );
-                $datenormc[$i] = substr( $datenormc[$i], 0, 4 ) . "-"
-                  . substr( $datenormc[$i], 4, 2 );
-            }
-            elsif ( length( $datenormc[$i] ) == 8 ) {
-                $datenormchuman[$i] =
-                    substr( $datenormchuman[$i], 6, 2 ) . "."
-                  . substr( $datenormchuman[$i], 4, 2 ) . "."
-                  . substr( $datenormchuman[$i], 0, 4 );
-            }
-
-            if ( length( $datenormd[$i] ) == 6 ) {
-                $datenormdhuman[$i] = "v"
-                  . substr( $datenormdhuman[$i], 4, 2 ) . "."
-                  . substr( $datenormdhuman[$i], 0, 4 );
-                $datenormd[$i] = "-"
-                  . substr( $datenormd[$i], 0, 4 ) . "-"
-                  . substr( $datenormd[$i], 4, 2 );
-            }
-            elsif ( length( $datenormd[$i] ) == 8 ) {
-                $datenormdhuman[$i] = "v"
-                  . substr( $datenormdhuman[$i], 6, 2 ) . "."
-                  . substr( $datenormdhuman[$i], 4, 2 ) . "."
-                  . substr( $datenormdhuman[$i], 0, 4 );
-                $datenormd[$i] = "-" . $datenormd[$i];
-            }
-            elsif ( $datenormd[$i] ) {
-                $datenormdhuman[$i] = "v" . $datenormdhuman[$i];
-                $datenormd[$i]      = "-" . $datenormd[$i];
-            }
-
-            if ( length( $datenorme[$i] ) == 6 ) {
-                $datenormehuman[$i] = substr( $datenormehuman[$i], 4, 2 ) . "."
-                  . substr( $datenormehuman[$i], 0, 4 );
-                $datenorme[$i] = substr( $datenorme[$i], 0, 4 ) . "-"
-                  . substr( $datenorme[$i], 4, 2 );
-            }
-            elsif ( length( $datenorme[$i] ) == 8 ) {
-                $datenormehuman[$i] =
-                    substr( $datenorme[$i], 6, 2 ) . "."
-                  . substr( $datenormehuman[$i], 4, 2 ) . "."
-                  . substr( $datenormehuman[$i], 0, 4 );
-            }
-
-            $datenormc[$i] = $datenormb[$i] unless $datenormc[$i];
-            $datenorme[$i] = $datenormd[$i] unless $datenorme[$i];
-
-            $datenormchuman[$i] = $datenormbhuman[$i]
-              unless $datenormchuman[$i];
-            $datenormehuman[$i] = $datenormdhuman[$i]
-              unless $datenormehuman[$i];
-
-            my $newdatenormhuman;
-
-            $newdatenormhuman = $datenormchuman[$i] . "-" . $datenormehuman[$i]
-              unless $datenormehuman[$i] eq "";
-
-            push @datenormhuman, $newdatenormhuman;
-
-            my $newdatenorm;
-
-            $newdatenorm = $datenormc[$i] . "/" . $datenorme[$i]
-              unless $datenorme[$i] eq "";
-
-            if ( $newdatenorm =~
-/^(-?(0|1|2)([0-9]{3})(((01|02|03|04|05|06|07|08|09|10|11|12)((0[1-9])|((1|2)[0-9])|(3[0-1])))|-((01|02|03|04|05|06|07|08|09|10|11|12)(\-((0[1-9])|((1|2)[0-9])|(3[0-1])))?))?)(\/-?(0|1|2)([0-9]{3})(((01|02|03|04|05|06|07|08|09|10|11|12)((0[1-9])|((1|2)[0-9])|(3[0-1])))|-((01|02|03|04|05|06|07|08|09|10|11|12)(-((0[1-9])|((1|2)[0-9])|(3[0-1])))?))?)?$/
-              )
-            {
-                push @datenorm, $newdatenorm;
-                print "OK:" . $newdatenorm . "\n";
-
-            }
-            else {
-                print "NOK:" . $newdatenorm . "\n";
-                push @datenorm, "";
-            }
-        }
-
+        # If 008 date fields contain four "u" or "-", empty them
         if ( $date0081 eq '----' ) {
             $date0081 = '';
         }
@@ -658,124 +407,139 @@ $importer->each(
             $date0082 = '';
         }
 
+        # Paste the two 008 date fields together, both as a normalized (/) and a human readable form (-)
         my $date008;
-        my $date008human;
+        my $date008_hum;
         if ( hasvalue($date0081) && hasvalue($date0082) ) {
             $date008      = $date0081 . "/" . $date0082;
-            $date008human = $date0081 . "-" . $date0082;
+            $date008_hum = $date0081 . "-" . $date0082;
         }
         else {
-            $date008      = $date0081;
-            $date008human = $date0081;
+            $date008 = $date008_hum  = $date0081;
         }
 
-        my @catdatehuman;
-        for (@catdate) {
-            push @catdatehuman,
-              (
-                    substr( $_, 6 ) . "."
-                  . substr( $_, 4, 2 ) . "."
-                  . substr( $_, 0, 4 ) );
-        }
-        my @controlper;
-        my $controlper_max = maxarray(
-            \@controlpera, \@controlperq, \@controlperb,
-            \@controlperc, \@controlperd
-        );
-        for my $i ( 0 .. ($controlper_max) - 1 ) {
-            $controlper[$i] = $controlpera[$i];
-            isbd( $controlper[$i], $controlperq[$i], " (",  ")" );
-            isbd( $controlper[$i], $controlperb[$i], " " );
-            isbd( $controlper[$i], $controlperc[$i], ", " );
-            isbd( $controlper[$i], $controlperd[$i], ", (", ")" );
+        # Delete special characters from 046 fields and make a copy for the human-readable form
+        my @f046b_hum;
+        for (@f046b) {
+            s/\.//g;
+            s/\[//g;
+            s/\]//g;
+            s/ //g;
+            push @f046b_hum, $_;
         }
 
-        my @controlkorp;
-        my $controlkorp_max = maxarray( \@controlkorpa, \@controlkorpb );
-        for my $i ( 0 .. ($controlkorp_max) - 1 ) {
-            $controlkorp[$i] = $controlkorpa[$i];
-            isbd( $controlkorp[$i], $controlkorpb[$i], ". " );
+        my @f046c_hum;
+        for (@f046c) {
+            s/\.//g;
+            s/\[//g;
+            s/\]//g;
+            s/ //g;
+            push @f046c_hum, $_;
         }
 
-        my @controlkong;
-        my $controlkong_max = maxarray( \@controlkonga, \@controlkonge );
-        for my $i ( 0 .. ($controlkong_max) - 1 ) {
-            $controlkong[$i] = $controlkonga[$i];
-            isbd( $controlkong[$i], $controlkonge[$i], ". " );
+        my @f046d_hum;
+        for (@f046d) {
+            s/\.//g;
+            s/\[//g;
+            s/\]//g;
+            s/ //g;
+            push @f046d_hum, $_;
         }
 
-        my @controlsub;
-        my $controlsub_max = maxarray(
-            \@controlsuba, \@controlsubv, \@controlsubx,
-            \@controlsuby, \@controlsubz
-        );
-        for my $i ( 0 .. ($controlsub_max) - 1 ) {
-            $controlsub[$i] = $controlsuba[$i];
-            isbd( $controlsub[$i], $controlsubv[$i], " -- " );
-            isbd( $controlsub[$i], $controlsubx[$i], " -- " );
-            isbd( $controlsub[$i], $controlsuby[$i], " -- " );
-            isbd( $controlsub[$i], $controlsubz[$i], " -- " );
+        my @f046e_hum;
+        for (@f046e) {
+            s/\.//g;
+            s/\[//g;
+            s/\]//g;
+            s/ //g;
+            push @f046e_hum, $_;
         }
 
-        my @controlgeo;
-        my $controlgeo_max = maxarray(
-            \@controlgeoa, \@controlgeov, \@controlgeox,
-            \@controlgeoy, \@controlgeoz
-        );
-        for my $i ( 0 .. ($controlgeo_max) - 1 ) {
-            $controlgeo[$i] = $controlgeoa[$i];
-            isbd( $controlgeo[$i], $controlgeov[$i], " -- " );
-            isbd( $controlgeo[$i], $controlgeox[$i], " -- " );
-            isbd( $controlgeo[$i], $controlgeoy[$i], " -- " );
-            isbd( $controlgeo[$i], $controlgeoz[$i], " -- " );
+        my $f046_max =
+            maxarray( \@f046a, \@f046b, \@f046c, \@f046d,
+                \@f046e );
+
+        my @f046_hum;
+        my @f046;
+
+        # Modify 046 based on their length.
+        # The normalised version has the format YYYY, YYYY-MM or YYYYMMDD, with - as a prefix for BC dates
+        # The human readable version hat the format YYYY, MM.YYYY or DD.MM.YYYY with v as a prefix for BC dates
+        for my $i ( 0 .. ($f046_max) - 1 ) {
+            if ( length( $f046b[$i] ) == 6 ) {
+                $f046b_hum[$i] = "v" . substr( $f046b_hum[$i], 4, 2 ) . "." . substr( $f046b_hum[$i], 0, 4 );
+                $f046b[$i] = "-" . substr( $f046b[$i], 0, 4 ) . "-" . substr( $f046b[$i], 4, 2 );
+            }
+            elsif ( length( $f046b[$i] ) == 8 ) {
+                $f046b_hum[$i] = "v" . substr( $f046b_hum[$i], 6, 2 ) . "." . substr( $f046b_hum[$i], 4, 2 ) . "." . substr( $f046b_hum[$i], 0, 4 );
+                $f046b[$i] = "-" . $f046b[$i];
+            }
+            elsif ( $f046b[$i] ) {
+                $f046b_hum[$i] = "v" . $f046b_hum[$i];
+                $f046b[$i]     = "-" . $f046b[$i];
+            }
+
+            if ( length( $f046c[$i] ) == 6 ) {
+                $f046c_hum[$i] = substr( $f046c_hum[$i], 4, 2 ) . "." . substr( $f046c_hum[$i], 0, 4 );
+                $f046c[$i] = substr( $f046c[$i], 0, 4 ) . "-" . substr( $f046c[$i], 4, 2 );
+            }
+            elsif ( length( $f046c[$i] ) == 8 ) {
+                $f046c_hum[$i] = substr( $f046c_hum[$i], 6, 2 ) . "." . substr( $f046c_hum[$i], 4, 2 ) . "." . substr( $f046c_hum[$i], 0, 4 );
+            }
+
+            if ( length( $f046d[$i] ) == 6 ) {
+                $f046d_hum[$i] = "v" . substr( $f046d_hum[$i], 4, 2 ) . "." . substr( $f046d_hum[$i], 0, 4 );
+                $f046d[$i] = "-" . substr( $f046d[$i], 0, 4 ) . "-" . substr( $f046d[$i], 4, 2 );
+            }
+            elsif ( length( $f046d[$i] ) == 8 ) {
+                $f046d_hum[$i] = "v" . substr( $f046d_hum[$i], 6, 2 ) . "." . substr( $f046d_hum[$i], 4, 2 ) . "." . substr( $f046d_hum[$i], 0, 4 );
+                $f046d[$i] = "-" . $f046d[$i];
+            }
+            elsif ( $f046d[$i] ) {
+                $f046d_hum[$i] = "v" . $f046d_hum[$i]; $f046d[$i]      = "-" . $f046d[$i];
+            }
+
+            if ( length( $f046e[$i] ) == 6 ) {
+                $f046e_hum[$i] = substr( $f046e_hum[$i], 4, 2 ) . "." . substr( $f046e_hum[$i], 0, 4 ); $f046e[$i] = substr( $f046e[$i], 0, 4 ) . "-" . substr( $f046e[$i], 4, 2 );
+            }
+            elsif ( length( $f046e[$i] ) == 8 ) {
+                $f046e_hum[$i] = substr( $f046e[$i], 6, 2 ) . "." . substr( $f046e_hum[$i], 4, 2 ) . "." . substr( $f046e_hum[$i], 0, 4 );
+            }
+
+            # If BC dates exist (fields 046$b and $d, replace the AC fields with the BC dates
+            $f046c[$i] = $f046b[$i] unless $f046c[$i];
+            $f046e[$i] = $f046d[$i] unless $f046e[$i];
+
+            $f046c_hum[$i] = $f046b_hum[$i] unless $f046c_hum[$i];
+            $f046e_hum[$i] = $f046d_hum[$i] unless $f046e_hum[$i];
+
+            # Create a human readable date field from field 046
+            my $newf046_hum;
+            $newf046_hum = $f046c_hum[$i] . "-" . $f046e_hum[$i] unless $f046e_hum[$i] eq "";
+            push @f046_hum, $newf046_hum;
+
+            # Create a normalized date field from field 046
+            my $newf046;
+            $newf046 = $f046c[$i] . "/" . $f046e[$i] unless $f046e[$i] eq "";
+
+            # Check if normalized date field matches the ead date regex, if not insert empty date
+            if ( $newf046 =~ /^(-?(0|1|2)([0-9]{3})(((01|02|03|04|05|06|07|08|09|10|11|12)((0[1-9])|((1|2)[0-9])|(3[0-1])))|-((01|02|03|04|05|06|07|08|09|10|11|12)(\-((0[1-9])|((1|2)[0-9])|(3[0-1])))?))?)(\/-?(0|1|2)([0-9]{3})(((01|02|03|04|05|06|07|08|09|10|11|12)((0[1-9])|((1|2)[0-9])|(3[0-1])))|-((01|02|03|04|05|06|07|08|09|10|11|12)(-((0[1-9])|((1|2)[0-9])|(3[0-1])))?))?)?$/ ) {
+                push @f046, $newf046;
+            }
+            else {
+                push @f046, "";
+            }
         }
 
-        my @nebenper;
-        my $nebenper_max = maxarray(
-            \@nebenpera, \@nebenperq, \@nebenperb, \@nebenperc, \@nebenperd,
-            \@nebenpert, \@nebenpern, \@nebenperp, \@nebenperm, \@nebenperr,
-            \@nebenpers, \@nebenpero, \@nebenperh
-        );
-        for my $i ( 0 .. ($nebenper_max) - 1 ) {
-            $nebenper[$i] = $nebenpera[$i];
-            isbd( $nebenper[$i], $nebenperq[$i], " (", ")" );
-            isbd( $nebenper[$i], $nebenperb[$i], " " );
-            isbd( $nebenper[$i], $nebenperc[$i], ", " );
-            isbd( $nebenper[$i], $nebenperd[$i], " (", ")" );
-            isbd( $nebenper[$i], $nebenpert[$i], " -- " );
-            isbd( $nebenper[$i], $nebenpern[$i], ". " );
-            isbd( $nebenper[$i], $nebenperp[$i], ". " );
-            isbd( $nebenper[$i], $nebenperm[$i], ". " );
-            isbd( $nebenper[$i], $nebenperr[$i], ". " );
-            isbd( $nebenper[$i], $nebenpers[$i], ". " );
-            isbd( $nebenper[$i], $nebenpero[$i], ". " );
-            isbd( $nebenper[$i], $nebenperh[$i], ". " );
-        }
-
-        my @nebenkorp;
-        my $nebenkorp_max = maxarray( \@nebenkorpa, \@nebenkorpb );
-        for my $i ( 0 .. ($nebenkorp_max) - 1 ) {
-            $nebenkorp[$i] = $nebenkorpa[$i];
-            isbd( $nebenkorp[$i], $nebenkorpb[$i], ". " );
-        }
-
-        my @nebenkong;
-        my $nebenkong_max = maxarray( \@nebenkonga, \@nebenkonge );
-        for my $i ( 0 .. ($nebenkong_max) - 1 ) {
-            $nebenkong[$i] = $nebenkonga[$i];
-            isbd( $nebenkong[$i], $nebenkonge[$i], ". " );
-        }
-
-        foreach (@hyperlinknote) {
-            s/^.*Digitalisat.*$/Digitalisat/g;
-        }
-
+        # Split field 041 into separate language coes
         my @langcodes;
-        my @language041 = $language041 =~ m/(...)/g;
-        shift @language041;
-
+        my @f041 = $f041 =~ m/(...)/g;
+        # Remove first language codes (not necessary, as it is also present in field 008
+        shift @f041;
+        # Push language code from field 008 into langcodes array
         push @langcodes, $language008 unless $language008 =~ /(zxx|und)/;
 
+        # Create array languages with human readable language names
         my @languages;
         foreach my $lang (@langcodes) {
             foreach my $lang1 ( keys %language ) {
@@ -785,204 +549,446 @@ $importer->each(
             }
         }
 
-        $link  = sprintf( "%-9.9d", $link );
-        $alink = sprintf( "%-9.9d", $alink );
-        $link = $alink unless $link;
+        # Generate title-field from subfields
+        my $f245 = $f245a;
+        isbd( $f245, $f245b, " : " );
+        isbd( $f245, $f245d, " = " );
+        isbd( $f245, $f245c, " / " );
+        isbd( $f245, $f245i, " ; " );
+        isbd( $f245, $f245j, ". " );
+        isbd( $f245, $f245n, ". " );
+        isbd( $f245, $f245p, ". " );
 
+        # Set 246$i = "Weiterer Titel" if $i does not exist
+        for my $i ( 0 .. (@f246a) - 1 ) {
+            if ( !( hasvalue( $f246i[$i] ) ) ) {
+                $f246i[$i] = "Weiterer Titel";
+            }
+        }
+
+        # Generate alt-title from subfields
+        my @f246;
+        my $f246_max = maxarray( \@f246a, \@f246n, \@f246p );
+        for my $i ( 0 .. ($f246_max) - 1 ) {
+            isbd( $f246[$i], $f246a[$i] );
+            isbd( $f246[$i], $f246n[$i], ". " );
+            isbd( $f246[$i], $f246p[$i], ". " );
+            $f246[$i] =~ s/^.\s//;
+        }
+
+        # Generate extent field
+        my $f300 = $f300a;
+        isbd( $f300, $f300e, " + " );
+
+        # If no 351$c (description level) is present, set it to Dossier=File
+        unless ( hasvalue($f351c) ) {
+            $f351c = "Dossier=File";
+        }
+
+        # If 351$c does not contain one of the standardised level, set it to Dossier=File
+        unless ( hasvalue( $lvlarg{$f351c} ) ) {
+            $f351c = "Dossier=File";
+        }
+
+        # Edit linking field: Make sure there are leading zeros. If field 773 is present, overwrite field 490 with the contents of field 773
+        $f490  = sprintf( "%-9.9d", $f490 );
+        $f773 = sprintf( "%-9.9d", $f773 );
+        $f490 = $f773 unless $f490;
+
+        # Generate content note from field 505 subfields
+        my @f505;
+        my $f505_max = maxarray(
+            \@f505a, \@f505n, \@f505g, \@f505t,
+            \@f505r, \@f505i, \@f505s, \@f505v
+        );
+        for my $i ( 0 .. ($f505_max) - 1 ) {
+            if ( hasvalue( $f505a[$i] ) ) { $f505[$i] = $f505a[$i] }
+            else {
+                isbd( $f505[$i], $f505n[$i] );
+                isbd( $f505[$i], $f505g[$i], ". (", ")" );
+                isbd( $f505[$i], $f505t[$i], " " );
+                isbd( $f505[$i], $f505r[$i], " / " );
+                isbd( $f505[$i], $f505i[$i], ". " );
+                isbd( $f505[$i], $f505s[$i], " " );
+                isbd( $f505[$i], $f505v[$i], " - " );
+            }
+            $f505[$i] =~ s/^,\s//;
+        }
+
+        # Generate content note from field 520 subfields
+        my @f520;
+        my $f520_max =
+            maxarray( \@f520a, \@f520b, \@f5203 );
+        for my $i ( 0 .. ($f520_max) - 1 ) {
+            isbd( $f520[$i], $f5203[$i], "", ": " );
+            isbd( $f520[$i], $f520a[$i] );
+            isbd( $f520[$i], $f520b[$i], ". " );
+            $f520[$i] =~ s/^,\s//;
+        }
+
+        # Generate access restriction from field 506 subfields
+        my @f506;
+        my $f506_max = maxarray( \@f506a, \@f506c );
+        for my $i ( 0 .. ($f506_max) - 1 ) {
+            isbd( $f506[$i], $f506a[$i] );
+            isbd( $f506[$i], $f506c[$i], ". " );
+            $f506[$i] =~ s/^,\s//;
+        }
+
+        # Generate bibliography note from field 510 subfields
+        my @f510;
+        my $f510_max = maxarray( \@f510a, \@f510i );
+        for my $i ( 0 .. ($f510_max) - 1 ) {
+            isbd( $f510[$i], $f510i[$i], ": " );
+            isbd( $f510[$i], $f510a[$i] );
+            $f510[$i] =~ s/^:\s//;
+        }
+
+        # Generate an acquisition note from field 541 subfields
+        my @f541;
+        my $f541_max = maxarray(
+            \@f5413, \@f541c, \@f541a,
+            \@f541d, \@f541e, \@f541f
+        );
+        for my $i ( 0 .. ($f541_max) - 1 ) {
+            isbd( $f541[$i], $f5413[$i], "",           ": " );
+            isbd( $f541[$i], $f541c[$i], "",           ". " );
+            isbd( $f541[$i], $f541a[$i], "Herkunft: ", ". " );
+            isbd( $f541[$i], $f541d[$i], "Datum: ",    ". " );
+            isbd( $f541[$i], $f541e[$i], "Akz.-Nr.: ", ". " );
+            isbd( $f541[$i], $f541f[$i], "Eigentümer: " );
+        }
+
+        # Generate an literature note from field 581 subfields
+        my @f581;
+        my $f581_max =
+          maxarray( \@f581i, \@f581a, \@f5813 );
+        for my $i ( 0 .. ($f581_max) - 1 ) {
+            isbd( $f581[$i], $f581i[$i], "",         ": " );
+            isbd( $f581[$i], $f581a[$i] );
+            isbd( $f581[$i], $f5813[$i], " (betr. ", ")" );
+            $f581[$i] =~ s/^,\s//;
+        }
+
+        # Generate a biographical history fields from field 545 subfields
+        my @f545;
+        my $f545_max = maxarray( \@f545a, \@f545b );
+        for my $i ( 0 .. ($f545_max) - 1 ) {
+            $f545[$i] = $f545a[$i];
+            isbd( $f545[$i], $f545b[$i], ". " );
+        }
+
+        # Generate a subject field (persons) from the field 600 subfields
+        for (@f6001) { s/\(DE-588\)//g }
+        my @f600;
+        my $f600_max = maxarray(
+            \@f600a, \@f600q, \@f600b,
+            \@f600c, \@f600d
+        );
+        for my $i ( 0 .. ($f600_max) - 1 ) {
+            $f600[$i] = $f600a[$i];
+            isbd( $f600[$i], $f600q[$i], " (",  ")" );
+            isbd( $f600[$i], $f600b[$i], " " );
+            isbd( $f600[$i], $f600c[$i], ", " );
+            isbd( $f600[$i], $f600d[$i], ", (", ")" );
+        }
+
+        # Generate a subject field (cooporations) from the field 610 subfields
+        for (@f6101) { s/\(DE-588\)//g }
+        my @f610;
+        my $f610_max = maxarray( \@f610a, \@f610b );
+        for my $i ( 0 .. ($f610_max) - 1 ) {
+            $f610[$i] = $f610a[$i];
+            isbd( $f610[$i], $f610b[$i], ". " );
+        }
+
+        # Generate a subject field (conferences) from the field 611 subfields
+        for (@f6111) { s/\(DE-588\)//g }
+        my @f611;
+        my $f611_max = maxarray( \@f611a, \@f611e );
+        for my $i ( 0 .. ($f611_max) - 1 ) {
+            $f611[$i] = $f611a[$i];
+            isbd( $f611[$i], $f611e[$i], ". " );
+        }
+
+        # Generate a subject field (subject terms) from the field 650 subfields
+        for (@f6501) { s/\(DE-588\)//g }
+        my @f650;
+        my $f650_max = maxarray(
+            \@f650a, \@f650v, \@f650x,
+            \@f650y, \@f650z
+        );
+        for my $i ( 0 .. ($f650_max) - 1 ) {
+            $f650[$i] = $f650a[$i];
+            isbd( $f650[$i], $f650v[$i], " -- " );
+            isbd( $f650[$i], $f650x[$i], " -- " );
+            isbd( $f650[$i], $f650y[$i], " -- " );
+            isbd( $f650[$i], $f650z[$i], " -- " );
+        }
+
+        # Generate a subject field (geographical) from the field 651 subfields
+        for (@f6511) { s/\(DE-588\)//g }
+        my @f651;
+        my $f651_max = maxarray(
+            \@f651a, \@f651v, \@f651x,
+            \@f651y, \@f651z
+        );
+        for my $i ( 0 .. ($f651_max) - 1 ) {
+            $f651[$i] = $f651a[$i];
+            isbd( $f651[$i], $f651v[$i], " -- " );
+            isbd( $f651[$i], $f651x[$i], " -- " );
+            isbd( $f651[$i], $f651y[$i], " -- " );
+            isbd( $f651[$i], $f651z[$i], " -- " );
+        }
+
+        # Generate an author field from the 700 and 100 subfields
+        for (@f7001) { s/\(DE-588\)//g }
+        my @f700;
+        my $f700_max = maxarray(
+            \@f700a, \@f700q, \@f700b, \@f700c, \@f700d,
+            \@f700t, \@f700n, \@f700p, \@f700m, \@f700r,
+            \@f700s, \@f700o, \@f700h
+        );
+        for my $i ( 0 .. ($f700_max) - 1 ) {
+            $f700[$i] = $f700a[$i];
+            isbd( $f700[$i], $f700q[$i], " (", ")" );
+            isbd( $f700[$i], $f700b[$i], " " );
+            isbd( $f700[$i], $f700c[$i], ", " );
+            isbd( $f700[$i], $f700d[$i], " (", ")" );
+            isbd( $f700[$i], $f700t[$i], " -- " );
+            isbd( $f700[$i], $f700n[$i], ". " );
+            isbd( $f700[$i], $f700p[$i], ". " );
+            isbd( $f700[$i], $f700m[$i], ". " );
+            isbd( $f700[$i], $f700r[$i], ". " );
+            isbd( $f700[$i], $f700s[$i], ". " );
+            isbd( $f700[$i], $f700o[$i], ". " );
+            isbd( $f700[$i], $f700h[$i], ". " );
+        }
+
+        # Generate an author field from the 710 and 110 subfields
+        for (@f7101) { s/\(DE-588\)//g }
+        my @f710;
+        my $f710_max = maxarray( \@f710a, \@f710b );
+        for my $i ( 0 .. ($f710_max) - 1 ) {
+            $f710[$i] = $f710a[$i];
+            isbd( $f710[$i], $f710b[$i], ". " );
+        }
+
+        # Generate an author field from the 711 and 111 subfields
+        for (@f7111) { s/\(DE-588\)//g }
+        my @f711;
+        my $f711_max = maxarray( \@f711a, \@f711e );
+        for my $i ( 0 .. ($f711_max) - 1 ) {
+            $f711[$i] = $f711a[$i];
+            isbd( $f711[$i], $f711e[$i], ". " );
+        }
+
+        # Replace MARC relator codes (fields 700$e, 710$e and 711$j with ead codes
+        for my $relator ( keys %relator ) {
+            foreach my $i ( 0 .. ( @f700e - 1 ) ) {
+                if ( $f700e[$i] =~ $relator ) {
+                    $f700e[$i] = $relator{$relator};
+                }
+            }
+            foreach my $j ( 0 .. ( @f710e - 1 ) ) {
+                if ( $f710e[$j] =~ $relator ) {
+                    $f710e[$j] = $relator{$relator};
+                }
+            }
+            foreach my $k ( 0 .. ( @f711j - 1 ) ) {
+                if ( $f711j[$k] =~ $relator ) {
+                    $f711j[$k] = $relator{$relator};
+                }
+            }
+        }
+
+        # Prepare origination field from field 751
+        for (@f7511) { s/\(DE-588\)//g }
+
+        # Generate combination of HAN-ISIL and system number (used as an ID in ead)
         my $isilsysnum = ( 'CH-001880-7-' . $sysnum );
+
+        # Set ISIL of the institution based on the 852 field
         my $isilnum;
         for my $isil ( keys %isil ) {
-            if ( $institution =~ $isil ) {
+            if ( $f852 =~ $isil ) {
                 $isilnum = $isil{$isil};
             }
         }
 
-        for my $relator ( keys %relator ) {
-            foreach my $i ( 0 .. ( @nebenperrelator - 1 ) ) {
-                if ( $nebenperrelator[$i] =~ $relator ) {
-                    $nebenperrelator[$i] = $relator{$relator};
-                }
-            }
-            foreach my $j ( 0 .. ( @nebenkorprelator - 1 ) ) {
-                if ( $nebenperrelator[$j] =~ $relator ) {
-                    $nebenperrelator[$j] = $relator{$relator};
-                }
-            }
-            foreach my $k ( 0 .. ( @nebenkongrelator - 1 ) ) {
-                if ( $nebenperrelator[$k] =~ $relator ) {
-                    $nebenperrelator[$k] = $relator{$relator};
-                }
-            }
+        # If the 856$z field contains "Digitalisat" remove the entire field except the word "Digitalisat"
+        foreach (@f856z) {
+            s/^.*Digitalisat.*$/Digitalisat/g;
         }
 
-        unless ( hasvalue($level) ) {
-            $level = "Dossier=File";
+        # Construct the array catdatehuman with the dates from the CAT field in human-readable form
+        my @catdatehuman;
+        for (@catdate) {
+            push @catdatehuman, ( substr( $_, 6 ) . "." . substr( $_, 4, 2 ) . "." . substr( $_, 0, 4 ) );
         }
 
-        unless ( hasvalue( $lvlarg{$level} ) ) {
-            $level = "Dossier=File";
+        # If the 909$f field contains "hide_this ead", set f909 to einzel.
+        # These are the pseudo-records to which unlinked records (not part of an hierarchy) are linked in the ead export.
+        # They are hidden in Aleph, for the ead export they have to be taken into account, therefore we remove the hidden code
+        if ( $f909 =~ /hide_this ead/ ) {
+            $f909 = "einzel";
         }
 
-        if ( $hide =~ /hide_this ead/ ) {
-            $hide = "einzel";
-        }
-
+        # Some records don't have to be exported as ead (records with 909-code hide this and some library specific records)
         unless (
-               ( $hide =~ /hide_this/ )
-            || ( $level =~ /Abteilung/ )
-            || ( $level =~ /Hauptabteilung/ )
-            || (   $hide =~ /collect_this.handschrift/
-                && $institution =~ /UBHandschriften/ )
-            || (   $hide =~ /collect_this.miszellan/
-                && $institution =~ /UBHandschriften/ )
-            || (   $hide =~ /collect_this.handschrift/
-                && $institution =~ /Luzern.ZHB/ )
-            || (   $hide =~ /collect_this.handschrift/
-                && $institution =~ /Vadiana/ )
-            || ( $institution =~ /REBUS/ )
-          )
+                  ( $f909 =~ /hide_this/ )
+               || ( $f351c =~ /Abteilung/ )
+               || ( $f351c =~ /Hauptabteilung/ )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /UBHandschriften/ )
+               || ( $f909 =~ /collect_this.miszellan/ && $f852 =~ /UBHandschriften/ )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /Luzern.ZHB/ )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /Vadiana/ )
+               || ( $f852 =~ /REBUS/ )
+        )
         {
-
+            # If a record has to be exported, we read in its field (already manipulated) into hashes (key = sysnum)
             push( @sysnum, $sysnum );
-            $title{$sysnum}            = ($title);
-            $alttitle{$sysnum}         = [@alttitle];
-            $alttitleintro{$sysnum}    = [@alttitleintro];
-            $ausreifung{$sysnum}       = $ausreifung;
-            $music{$sysnum}            = [@music];
-            $date{$sysnum}             = $date;
-            $size{$sysnum}             = $size;
-            $dimension{$sysnum}        = $dimension;
-            $carrier{$sysnum}          = [@carrier];
-            $arrangement{$sysnum}      = $arrangement;
-            $level{$sysnum}            = $level;
-            $note{$sysnum}             = [@note];
-            $noteA{$sysnum}            = [@noteA];
-            $content{$sysnum}          = [@content];
-            $contentform{$sysnum}      = [@contentform];
-            $restrict{$sysnum}         = [@restrict];
-            $bibliography{$sysnum}     = [@bibliography];
-            $acqinfo{$sysnum}          = [@acqinfo];
-            $relatedmat{$sysnum}       = [@relatedmat];
-            $bioghist{$sysnum}         = [@bioghist];
-            $link{$sysnum}             = $link;
-            $institution{$sysnum}      = $institution;
-            $institutionname{$sysnum}  = [@institutionname];
-            $signature{$sysnum}        = [@signature];
-            $signaturealt{$sysnum}     = [@signaturealt];
-            $signatureold{$sysnum}     = [@signatureold];
+            $date008{$sysnum}          = $date008;
+            $date008_hum{$sysnum}      = $date008_hum;
+            $f046{$sysnum}             = [@f046];
+            $f046_hum{$sysnum}         = [@f046_hum];
+            $f245{$sysnum}             = ($f245);
+            $f246{$sysnum}             = [@f246];
+            $f246i{$sysnum}            = [@f246i];
+            $f250{$sysnum}             = $f250;
+            $f254{$sysnum}             = [@f254];
+            $f260{$sysnum}             = $f260;
+            $f300{$sysnum}             = $f300;
+            $f300c{$sysnum}            = $f300c;
+            $f340{$sysnum}             = [@f340];
+            $f351a{$sysnum}            = $f351a;
+            $f351c{$sysnum}            = $f351c;
+            $f500{$sysnum}             = [@f500];
+            $f505{$sysnum}             = [@f505];
+            $f506{$sysnum}             = [@f506];
+            $f510{$sysnum}             = [@f510];
+            $f520{$sysnum}             = [@f520];
+            $f525{$sysnum}             = [@f525];
+            $f541{$sysnum}             = [@f541];
+            $f544{$sysnum}             = [@f544];
+            $f545{$sysnum}             = [@f545];
+            $f555{$sysnum}             = [@f555];
+            $f561{$sysnum}             = [@f561];
+            $f563{$sysnum}             = [@f563];
+            $f581{$sysnum}             = [@f581];
+            $f490{$sysnum}             = $f490;
+            $f852{$sysnum}             = $f852;
+            $f852a{$sysnum}            = [@f852a];
+            $f852p{$sysnum}            = [@f852p];
+            $f852Ap{$sysnum}           = [@f852Ap];
+            $f852Ep{$sysnum}           = [@f852Ep];
+            $f600{$sysnum}             = [@f600];
+            $f600a{$sysnum}            = [@f600a];
+            $f6001{$sysnum}            = [@f6001];
+            $f600c{$sysnum}            = [@f600c];
+            $f610{$sysnum}             = [@f610];
+            $f610a{$sysnum}            = [@f610a];
+            $f6101{$sysnum}            = [@f6101];
+            $f611{$sysnum}             = [@f611];
+            $f611a{$sysnum}            = [@f611a];
+            $f6111{$sysnum}            = [@f6111];
+            $f650{$sysnum}             = [@f650];
+            $f650a{$sysnum}            = [@f650a];
+            $f6501{$sysnum}            = [@f6501];
+            $f651{$sysnum}             = [@f651];
+            $f651a{$sysnum}            = [@f651a];
+            $f6511{$sysnum}            = [@f6511];
+            $f655{$sysnum}             = [@f655];
+            $f700{$sysnum}             = [@f700];
+            $f700a{$sysnum}            = [@f700a];
+            $f7001{$sysnum}            = [@f7001];
+            $f700e{$sysnum}            = [@f700e];
+            $f710{$sysnum}             = [@f710];
+            $f710a{$sysnum}            = [@f710a];
+            $f7101{$sysnum}            = [@f7101];
+            $f710e{$sysnum}            = [@f710e];
+            $f711{$sysnum}             = [@f711];
+            $f711a{$sysnum}            = [@f711a];
+            $f7111{$sysnum}            = [@f7111];
+            $f711j{$sysnum}            = [@f711j];
+            $f751a{$sysnum}            = [@f751a];
+            $f7511{$sysnum}            = [@f7511];
+            $f856u{$sysnum}            = [@f856u];
+            $f856z{$sysnum}            = [@f856z];
+            $f909{$sysnum}             = $f909;
             $isilsysnum{$sysnum}       = $isilsysnum;
             $isilnum{$sysnum}          = $isilnum;
             $languages{$sysnum}        = [@languages];
             $langcodes{$sysnum}        = [@langcodes];
-            $findaid{$sysnum}          = [@findaid];
-            $custodhist{$sysnum}       = [@custodhist];
-            $einband{$sysnum}          = [@einband];
-            $literatur{$sysnum}        = [@literatur];
-            $datenorm{$sysnum}         = [@datenorm];
-            $datenormhuman{$sysnum}    = [@datenormhuman];
-            $date008{$sysnum}          = $date008;
-            $date008human{$sysnum}     = $date008human;
-            $controlper{$sysnum}       = [@controlper];
-            $controlpernorm{$sysnum}   = [@controlpera];
-            $controlpergnd{$sysnum}    = [@controlpergnd];
-            $controlperfamily{$sysnum} = [@controlperc];
-            $controlkong{$sysnum}      = [@controlkong];
-            $controlkongnorm{$sysnum}  = [@controlkonga];
-            $controlkonggnd{$sysnum}   = [@controlkonggnd];
-            $controlkorp{$sysnum}      = [@controlkorp];
-            $controlkorpnorm{$sysnum}  = [@controlkorpa];
-            $controlkorpgnd{$sysnum}   = [@controlkorpgnd];
-            $controlsub{$sysnum}       = [@controlsub];
-            $controlsubnorm{$sysnum}   = [@controlsuba];
-            $controlsubgnd{$sysnum}    = [@controlsubgnd];
-            $controlgeo{$sysnum}       = [@controlgeo];
-            $controlgeonorm{$sysnum}   = [@controlgeoa];
-            $controlgeognd{$sysnum}    = [@controlgeognd];
-            $controlgenre{$sysnum}     = [@controlgenre];
-            $nebenper{$sysnum}         = [@nebenper];
-            $nebenpernorm{$sysnum}     = [@nebenpera];
-            $nebenpergnd{$sysnum}      = [@nebenpergnd];
-            $nebenperrelator{$sysnum}  = [@nebenperrelator];
-            $nebenkong{$sysnum}        = [@nebenkong];
-            $nebenkongnorm{$sysnum}    = [@nebenkonga];
-            $nebenkonggnd{$sysnum}     = [@nebenkonggnd];
-            $nebenkongrelator{$sysnum} = [@nebenkongrelator];
-            $nebenkorp{$sysnum}        = [@nebenkorp];
-            $nebenkorpnorm{$sysnum}    = [@nebenkorpa];
-            $nebenkorpgnd{$sysnum}     = [@nebenkorpgnd];
-            $nebenkorprelator{$sysnum} = [@nebenkorprelator];
-            $originationa{$sysnum}     = [@originationa];
-            $originationgnd{$sysnum}   = [@originationgnd];
-            $hyperlink{$sysnum}        = [@hyperlink];
-            $hyperlinknote{$sysnum}    = [@hyperlinknote];
-            $hide{$sysnum}             = $hide;
             $catdate{$sysnum}          = [@catdate];
             $catdatehuman{$sysnum}     = [@catdatehuman];
         }
     }
 );
 
+#Now we're ready to being creating ead-files. First we select all records with level=Bestand and build up an ead-file
+#containint their children records. Exception: The pseudo records for unlinked records.
+
 foreach (@sysnum) {
-    if ( ( $level{$_} =~ /Bestand/ ) && !( $hide{$_} =~ /einzel/ ) ) {
+    if ( ( $f351c{$_} =~ /Bestand/ ) && !( $f909{$_} =~ /einzel/ ) ) {
         intro($_);
         ead($_);
         extro();
     }
 }
+
+#After all records linked to Bestände (Fonds) are used, we created the ead-files for the unlinked records. We can
+#identify them by the contant of the sysnumcheck hash (for records which were already used the hash value is true,
+#to make sure we don't use a record twice.
+
+#First we set the 490 field of each unlinked record, so that is points to the pseudo record.
 
 foreach (@sysnum) {
     unless ( $sysnumcheck{$_} ) {
-        if ( $institution{$_} =~ /Basel UBHandschriften/ ) {
-            $link{$_} = '000297324' unless $_ == '000297324';
+        if ( $f852{$_} =~ /Basel UBHandschriften/ ) {
+            $f490{$_} = '000297324' unless $_ == '000297324';
         }
-        elsif ( $institution{$_} =~ /SWA/ ) {
-            $link{$_} = '000297326' unless $_ == '000297326';
+        elsif ( $f852{$_} =~ /SWA/ ) {
+            $f490{$_} = '000297326' unless $_ == '000297326';
         }
-        elsif ( $institution{$_} =~ /Gosteli/ ) {
-            $link{$_} = '000297327' unless $_ == '000297327';
+        elsif ( $f852{$_} =~ /Gosteli/ ) {
+            $f490{$_} = '000297327' unless $_ == '000297327';
         }
-        elsif ( $institution{$_} =~ /Rorschach/ ) {
-            $link{$_} = '000297330' unless $_ == '000297330';
+        elsif ( $f852{$_} =~ /Rorschach/ ) {
+            $f490{$_} = '000297330' unless $_ == '000297330';
         }
-        elsif ( $institution{$_} =~ /Ausserrhoden/ ) {
-            $link{$_} = '000297407' unless $_ == '000297407';
+        elsif ( $f852{$_} =~ /Ausserrhoden/ ) {
+            $f490{$_} = '000297407' unless $_ == '000297407';
         }
-        elsif ( $institution{$_} =~ /Thurgau/ ) {
-            $link{$_} = '000297408' unless $_ == '000297408';
+        elsif ( $f852{$_} =~ /Thurgau/ ) {
+            $f490{$_} = '000297408' unless $_ == '000297408';
         }
-        elsif ( $institution{$_} =~ /Luzern/ ) {
-            $link{$_} = '000297409' unless $_ == '000297409';
+        elsif ( $f852{$_} =~ /Luzern/ ) {
+            $f490{$_} = '000297409' unless $_ == '000297409';
         }
-        elsif ( $institution{$_} =~ /Solothurn/ ) {
-            $link{$_} = '000297410' unless $_ == '000297410';
+        elsif ( $f852{$_} =~ /Solothurn/ ) {
+            $f490{$_} = '000297410' unless $_ == '000297410';
         }
-        elsif ( $institution{$_} =~ /Vadiana/ ) {
-            $link{$_} = '000297411' unless $_ == '000297411';
+        elsif ( $f852{$_} =~ /Vadiana/ ) {
+            $f490{$_} = '000297411' unless $_ == '000297411';
         }
-        elsif ( $institution{$_} =~ /Stiftsbibliothek/ ) {
-            $link{$_} = '000297412' unless $_ == '000297412';
+        elsif ( $f852{$_} =~ /Stiftsbibliothek/ ) {
+            $f490{$_} = '000297412' unless $_ == '000297412';
         }
     }
 }
 
+#Second we create ead files for each pseudo record
+
 foreach (@sysnum) {
-    if ( $hide{$_} =~ /einzel/ ) {
+    if ( $f909{$_} =~ /einzel/ ) {
         intro($_);
         ead($_);
         extro();
     }
 }
 
-#foreach (@sysnum) {
-#    unless ($sysnumcheck{$_}) {
-#      if ($institution{$_} =~ /Stiftsbibliothek/) {
-#            $link{$_} = 0;
-#	    print $_ . "\n";
-#            ead($_);
-#        }
-#    }
-#}
-
+# Gives back the maximum length of the arrays given as arguments
 sub maxarray {
     my $max;
     foreach my $i ( 0 .. ( @_ - 1 ) ) {
@@ -991,17 +997,24 @@ sub maxarray {
     return $max;
 }
 
+# Checks if the variable is both defined and not an empty string
 sub hasvalue {
     my $i = 1 if defined $_[0] && $_[0] ne "";
     return $i;
 }
 
+# Links together MARC subfields including interpunction
 sub isbd {
     if ( hasvalue( $_[1] ) ) {
         $_[0] = $_[0] . $_[2] . $_[1] . $_[3];
     }
 }
 
+# Generates a simple ead-element:
+# Argument 0: element content
+# Argument 1: element tag
+# Argument 2: element argument name
+# Argument 3: element argument content
 sub simpletag {
     if ( defined $_[0] ) {
         foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
@@ -1012,6 +1025,10 @@ sub simpletag {
     }
 }
 
+# Generates an ead-element with head element and p-tags:
+# Argument 0: p-element content
+# Argument 1: element tag
+# Argument 2: head element content
 sub simpletag_p {
     if ( @{ $_[0] } > 0 ) {
         $writer->startTag( $_[1] );
@@ -1027,6 +1044,26 @@ sub simpletag_p {
     }
 }
 
+# Generates an ead-element with head element and bibref-tags:
+# Argument 0: bibref-element content
+# Argument 1: element tag
+# Argument 2: head element content
+sub simpletag_b {
+    if ( @{ $_[0] } > 0 ) {
+        $writer->startTag( $_[1] );
+        $writer->startTag("head");
+        $writer->characters( $_[2] );
+        $writer->endTag("head");
+        foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
+            $writer->startTag("bibref");
+            $writer->characters( $_[0][$i] );
+            $writer->endTag("bibref");
+        }
+        $writer->endTag( $_[1] );
+    }
+}
+
+# Creates the beginning of an ead-file
 sub intro {
     my $sysnum = $_[0];
 
@@ -1050,7 +1087,7 @@ sub intro {
     $writer->startTag("titlestmt");
     $writer->startTag("titleproper");
 
-    $writer->characters( $title{$sysnum} );
+    $writer->characters( $f245{$sysnum} );
 
     $writer->endTag("titleproper");
     $writer->endTag("titlestmt");
@@ -1059,7 +1096,8 @@ sub intro {
     $writer->startTag("profiledesc");
     $writer->startTag("langusage");
 
-    if ( $institution{$sysnum} =~ /Rorschach/ ) {
+    #The description language of the Rorschach archive is English, so we make an exception here
+    if ( $f852{$sysnum} =~ /Rorschach/ ) {
         $writer->startTag(
             "language",
             "scriptcode" => "Latn",
@@ -1084,81 +1122,91 @@ sub intro {
 
 }
 
+# Writes the end of an ead-file
 sub extro {
     $writer->endTag("ead");
     $writer->end();
 }
 
+# Writes the body of an ead-file
 sub ead {
-
+    # The sub is executed with the system number of the records we're currently transforming
     my $sysnum = $_[0];
+
+    # We set sysunumcheck to true, so that the record isn't used twice
     $sysnumcheck{$sysnum} = 1;
 
+    # Depending on field 351, we use either an archdesc or a c-element
     $writer->startTag(
-        $lvl{ $level{$sysnum} },
-        "level" => $lvlarg{ $level{$sysnum} },
+        $lvl{ $f351c{$sysnum} },
+        "level" => $lvlarg{ $f351c{$sysnum} },
         "id"    => $isilsysnum{$sysnum}
     );
     $writer->startTag("did");
 
-    simpletag( $signature{$sysnum},    "unitid" );
-    simpletag( $signaturealt{$sysnum}, "unitid", "label", "Weitere Signatur" );
-    simpletag( $signatureold{$sysnum}, "unitid", "label", "Frühere Signatur" );
+    # Write unitid elements for signature information
+    simpletag( $f852p{$sysnum},  "unitid" );
+    simpletag( $f852Ap{$sysnum}, "unitid", "label", "Weitere Signatur" );
+    simpletag( $f852Ep{$sysnum}, "unitid", "label", "Frühere Signatur" );
 
-    foreach my $i ( 0 .. ( @{ $hyperlink{$sysnum} } - 1 ) ) {
+    # Write dao elements for links
+    foreach my $i ( 0 .. ( @{ $f856u{$sysnum} } - 1 ) ) {
         $writer->startTag(
-            "dao", [ $xlink, "href" ] => $hyperlink{$sysnum}[$i],
-            [ $xlink, "title" ] => $hyperlinknote{$sysnum}[$i]
+            "dao", [ $xlink, "href" ] => $f856u{$sysnum}[$i],
+            [ $xlink, "title" ] => $f856z{$sysnum}[$i]
         );
         $writer->endTag("dao");
     }
 
-    unless ( $hide{$sysnum} =~ /einzel/ ) {
+    # Write a link to the HAN OPAC (exception: pseudo records for unlinked records)
+
+    unless ( $f909{$sysnum} =~ /einzel/ ) {
         $writer->startTag(
             "dao", [ $xlink, "type" ] => "simple",
-            [ $xlink, "show" ]    => "embed",
-            [ $xlink, "actuate" ] => "onLoad",
-            [ $xlink, "href" ] =>
-'http://aleph.unibas.ch/F/?local_base=DSV05&con_lng=GER&func=find-b&find_code=SYS&request='
-              . $sysnum,
+            [ $xlink, "show" ]        => "embed",
+            [ $xlink, "actuate" ]     => "onLoad",
+            [ $xlink, "href" ]        => 'http://aleph.unibas.ch/F/?local_base=DSV05&con_lng=GER&func=find-b&find_code=SYS&request=' . $sysnum,
             [ $xlink, "title" ] => "Katalogeintrag im Verbundkatalog HAN"
         );
         $writer->endTag("dao");
     }
 
+    # Write repository element for the library/archive
     $writer->startTag("repository");
     $writer->startTag(
         "corpname",
         "role"           => "Bestandshaltende Einrichtung",
-        "normal"         => $institutionname{$sysnum}[0],
+        "normal"         => $f852a{$sysnum}[0],
         "authfilenumber" => $isilnum{$sysnum}
     );
-    $writer->characters( $institutionname{$sysnum}[0] );
+    $writer->characters( $f852a{$sysnum}[0] );
     $writer->endTag("corpname");
     $writer->endTag("repository");
 
+    # Write langmaterial element for language information, both codes and human readable
     $writer->startTag("langmaterial");
-
     foreach my $i ( 0 .. ( @{ $langcodes{$sysnum} } - 1 ) ) {
         $writer->startTag( "language", "langcode" => $langcodes{$sysnum}[$i] );
         $writer->characters( $languages{$sysnum}[$i] );
         $writer->endTag("language");
     }
-
     $writer->endTag("langmaterial");
 
-    foreach my $i ( 0 .. ( @{ $nebenper{$sysnum} } - 1 ) ) {
-        if ( $nebenperrelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-            if ( $nebenpergnd{$sysnum}[$i] ne "" ) {
+    # Write origination element for the creator of the Fonds (1##/7##$e=Aktenbildner)
+    # Case 1: Creator is a person
+    foreach my $i ( 0 .. ( @{ $f700{$sysnum} } - 1 ) ) {
+        if ( $f700e{$sysnum}[$i] eq 'Aktenbildner' ) {
+            # Depending whether the 100/700 field has a GND-link we treat the field differently
+            if ( $f7001{$sysnum}[$i] ne "" ) {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "persname",
-                    "normal"         => $nebenpernorm{$sysnum}[$i],
+                    "normal"         => $f700a{$sysnum}[$i],
                     "role"           => "Bestandsbildner",
                     "source"         => "GND",
-                    "authfilenumber" => "$nebenpergnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f7001{$sysnum}[$i]"
                 );
-                $writer->characters( $nebenper{$sysnum}[$i] );
+                $writer->characters( $f700{$sysnum}[$i] );
                 $writer->endTag("persname");
                 $writer->endTag("origination");
             }
@@ -1166,28 +1214,30 @@ sub ead {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "persname",
-                    "normal" => $nebenpernorm{$sysnum}[$i],
+                    "normal" => $f700a{$sysnum}[$i],
                     "role"   => "Bestandsbildner"
                 );
-                $writer->characters( $nebenper{$sysnum}[$i] );
+                $writer->characters( $f700{$sysnum}[$i] );
                 $writer->endTag("persname");
                 $writer->endTag("origination");
             }
         }
     }
 
-    foreach my $i ( 0 .. ( @{ $nebenkorp{$sysnum} } - 1 ) ) {
-        if ( $nebenkorprelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-            if ( $nebenkorpgnd{$sysnum}[$i] ne "" ) {
+    # Case 2: Creator is a cooperation
+    foreach my $i ( 0 .. ( @{ $f710{$sysnum} } - 1 ) ) {
+        if ( $f710e{$sysnum}[$i] eq 'Aktenbildner' ) {
+            # Depending whether the 100/700 field has a GND-link we treat the field differently
+            if ( $f7101{$sysnum}[$i] ne "" ) {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "corpname",
-                    "normal"         => $nebenkorpnorm{$sysnum}[$i],
+                    "normal"         => $f710a{$sysnum}[$i],
                     "role"           => "Bestandsbildner",
                     "source"         => "GND",
-                    "authfilenumber" => "$nebenkorpgnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f7101{$sysnum}[$i]"
                 );
-                $writer->characters( $nebenkorp{$sysnum}[$i] );
+                $writer->characters( $f710{$sysnum}[$i] );
                 $writer->endTag("corpname");
                 $writer->endTag("origination");
             }
@@ -1195,28 +1245,30 @@ sub ead {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "corpname",
-                    "normal" => $nebenkorpnorm{$sysnum}[$i],
+                    "normal" => $f710a{$sysnum}[$i],
                     "role"   => "Bestandsbildner"
                 );
-                $writer->characters( $nebenkorp{$sysnum}[$i] );
+                $writer->characters( $f710{$sysnum}[$i] );
                 $writer->endTag("corpname");
                 $writer->endTag("origination");
             }
         }
     }
 
-    foreach my $i ( 0 .. ( @{ $nebenkong{$sysnum} } - 1 ) ) {
-        if ( $nebenkongrelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-            if ( $nebenkonggnd{$sysnum}[$i] ne "" ) {
+    # Case 3: Creator is a conference
+    foreach my $i ( 0 .. ( @{ $f711{$sysnum} } - 1 ) ) {
+        if ( $f711j{$sysnum}[$i] eq 'Aktenbildner' ) {
+            # Depending whether the 100/700 field has a GND-link we treat the field differently
+            if ( $f7111{$sysnum}[$i] ne "" ) {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "corpname",
-                    "normal"         => $nebenkongnorm{$sysnum}[$i],
+                    "normal"         => $f711a{$sysnum}[$i],
                     "role"           => "Bestandsbildner",
                     "source"         => "GND",
-                    "authfilenumber" => "$nebenkonggnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f7111{$sysnum}[$i]"
                 );
-                $writer->characters( $nebenkong{$sysnum}[$i] );
+                $writer->characters( $f711{$sysnum}[$i] );
                 $writer->endTag("corpname");
                 $writer->endTag("origination");
             }
@@ -1224,48 +1276,50 @@ sub ead {
                 $writer->startTag("origination");
                 $writer->startTag(
                     "corpname",
-                    "normal" => $nebenkongnorm{$sysnum}[$i],
+                    "normal" => $f711a{$sysnum}[$i],
                     "role"   => "Bestandsbildner"
                 );
-                $writer->characters( $nebenkong{$sysnum}[$i] );
+                $writer->characters( $f711{$sysnum}[$i] );
                 $writer->endTag("corpname");
                 $writer->endTag("origination");
             }
         }
     }
 
-    if ( hasvalue( $title{$sysnum} ) ) {
+    # Generate unittitle element for field 245. Write additional unititle elements for 246 fields (with attribute label=245$i)
+    if ( hasvalue( $f245{$sysnum} ) ) {
         $writer->startTag("unittitle");
-        $writer->characters( $title{$sysnum} );
+        $writer->characters( $f245{$sysnum} );
         $writer->endTag("unittitle");
 
-        foreach my $i ( 0 .. ( @{ $alttitle{$sysnum} } - 1 ) ) {
+        foreach my $i ( 0 .. ( @{ $f246{$sysnum} } - 1 ) ) {
             $writer->startTag( "unittitle",
-                "label" => $alttitleintro{$sysnum}[$i] );
+                "label" => $f246i{$sysnum}[$i] );
             $writer->startTag("title");
-            $writer->characters( $alttitle{$sysnum}[$i] );
+            $writer->characters( $f246{$sysnum}[$i] );
             $writer->endTag("title");
             $writer->endTag("unittitle");
         }
     }
+    # If only fields 246 are present, use the first field in place of field 245
     else {
-
-        $writer->startTag( "unittitle", "label" => $alttitleintro{$sysnum}[0] );
-        $writer->characters( $alttitle{$sysnum}[0] );
+        $writer->startTag( "unittitle", "label" => $f246i{$sysnum}[0] );
+        $writer->characters( $f246{$sysnum}[0] );
         $writer->endTag("unittitle");
 
-        foreach my $i ( 1 .. ( @{ $alttitle{$sysnum} } - 1 ) ) {
+        foreach my $i ( 1 .. ( @{ $f246{$sysnum} } - 1 ) ) {
             $writer->startTag( "unittitle",
-                "label" => $alttitleintro{$sysnum}[$i] );
+                "label" => $f246i{$sysnum}[$i] );
             $writer->startTag("title");
-            $writer->characters( $alttitle{$sysnum}[$i] );
+            $writer->characters( $f246{$sysnum}[$i] );
             $writer->endTag("title");
             $writer->endTag("unittitle");
         }
     }
-
-    if ( hasvalue( $datenorm{$sysnum}[0] ) && @{ $datenorm{$sysnum} } == 1 ) {
-        $writer->startTag( "unitdate", "normal" => $datenorm{$sysnum}[0] );
+    # Generate unitdate element for dates
+    # For the attribute normal use field 046 (if only one field 046 is present) or field 008 (if multiple fields 046 are present).
+    if ( hasvalue( $f046{$sysnum}[0] ) && @{ $f046{$sysnum} } == 1 ) {
+        $writer->startTag( "unitdate", "normal" => $f046{$sysnum}[0] );
     }
     elsif ( hasvalue( $date008{$sysnum} ) ) {
         $writer->startTag( "unitdate", "normal" => $date008{$sysnum} );
@@ -1274,144 +1328,66 @@ sub ead {
         $writer->startTag("unitdate");
     }
 
-    if ( hasvalue( $date{$sysnum} ) ) {
-        $writer->characters( $date{$sysnum} );
-    }
-    elsif ( hasvalue( $datenormhuman{$sysnum}[0] )
-        && @{ $datenormhuman{$sysnum} } == 1 )
-    {
-        $writer->characters( $datenormhuman{$sysnum}[0] );
-    }
-    elsif ( hasvalue( $date008human{$sysnum} ) ) {
-        $writer->characters( $date008human{$sysnum} );
-    }
+    # For the human readable date use field 260 (if present) else field 046 (if only one field 046 is present), else field 008
 
+    if ( hasvalue( $f260{$sysnum} ) ) {
+        $writer->characters( $f260{$sysnum} );
+    }
+    elsif ( hasvalue( $f046_hum{$sysnum}[0] )
+        && @{ $f046_hum{$sysnum} } == 1 )
+    {
+        $writer->characters( $f046_hum{$sysnum}[0] );
+    }
+    elsif ( hasvalue( $date008_hum{$sysnum} ) ) {
+        $writer->characters( $date008_hum{$sysnum} );
+    }
     $writer->endTag("unitdate");
 
-    simpletag( $music{$sysnum}, "materialspec" );
+    simpletag( $f254{$sysnum}, "materialspec" );
 
     $writer->startTag("physdesc");
 
-    if ( defined $ausreifung{$sysnum} ) {
-        $writer->startTag( "physfacet", "label" => "Ausreifungsgrad" );
-        $writer->characters( $ausreifung{$sysnum} );
-        $writer->endTag("physfacet");
-    }
-
-    if ( defined $size{$sysnum} ) {
-        $writer->startTag("extent");
-        $writer->characters( $size{$sysnum} );
-        $writer->endTag("extent");
-    }
-
-    if ( defined $dimension{$sysnum} ) {
-        $writer->startTag("dimensions");
-        $writer->characters( $dimension{$sysnum} );
-        $writer->endTag("dimensions");
-    }
-
-    foreach my $i ( 0 .. ( @{ $carrier{$sysnum} } - 1 ) ) {
-        if ( defined $carrier{$sysnum}[$i] ) {
-            $writer->startTag( "physfacet", "label" => "Material" );
-            $writer->characters( $carrier{$sysnum}[$i] );
-            $writer->endTag("physfacet");
-        }
-    }
-
-    foreach my $i ( 0 .. ( @{ $einband{$sysnum} } - 1 ) ) {
-        if ( defined $einband{$sysnum}[$i] ) {
-            $writer->startTag( "physfacet", "label" => "Einband" );
-            $writer->characters( $einband{$sysnum}[$i] );
-            $writer->endTag("physfacet");
-        }
-    }
+    simpletag($f250{$sysnum},  "physfacet", "label", "Ausreifungsgrad" );
+    simpletag($f300{$sysnum},  "extent" );
+    simpletag($f300c{$sysnum}, "dimensions" );
+    simpletag($f340{$sysnum},  "physfacet", "label", "Material" );
+    simpletag($f563{$sysnum},  "physfacet", "label", "Einband" );
 
     $writer->endTag("physdesc");
 
-    foreach my $i ( 0 .. ( @{ $note{$sysnum} } - 1 ) ) {
-        $writer->startTag(
-            "note",
+    foreach my $i ( 0 .. ( @{ $f500{$sysnum} } - 1 ) ) {
+        $writer->startTag( "note",
             "label"    => "Bemerkung",
             "audience" => "external"
         );
         $writer->startTag("p");
-        $writer->characters( $note{$sysnum}[$i] );
+        $writer->characters( $f500{$sysnum}[$i] );
         $writer->endTag("p");
         $writer->endTag("note");
     }
 
-    simpletag( $noteA{$sysnum}, "abstract", "type", "Darin" );
+    simpletag( $f525{$sysnum}, "abstract", "type", "Darin" );
 
     $writer->endTag("did");
 
-    simpletag_p( $content{$sysnum},     "scopecontent", "Inhaltsangabe" );
-    simpletag_p( $contentform{$sysnum}, "scopecontent", "Inhaltsangabe" );
+    simpletag_p( $f505{$sysnum},     "scopecontent", "Inhaltsangabe" );
+    simpletag_p( $f520{$sysnum},     "scopecontent", "Inhaltsangabe" );
+    simpletag_p( $f351a{$sysnum},    "arrangement", "Ordnungszustand" );
+    simpletag_p( $f506{$sysnum},     "userestrict", "Benutzungsbeschränkung" );
 
-    if ( hasvalue( $arrangement{$sysnum} ) ) {
-        $writer->startTag("arrangement");
-        $writer->startTag("head");
-        $writer->characters("Ordnungszustand");
-        $writer->endTag("head");
-        $writer->startTag("p");
-        $writer->characters( $arrangement{$sysnum} );
-        $writer->endTag("p");
-        $writer->endTag("arrangement");
-    }
+    simpletag_b( $f510{$sysnum},     "bibliography", "Bibliographie" );
+    simpletag_b( $f581{$sysnum},     "bibliography", "Literaturhinweise" );
 
-    simpletag_p( $restrict{$sysnum}, "userestrict", "Benutzungsbeschränkung" );
+    simpletag_p( $f541{$sysnum},     "acqinfo", "Akzession" );
+    simpletag_p( $f544{$sysnum},     "relatedmaterial", "Verwandte Verzeichnungseinheiten" );
+    simpletag_p( $f545{$sysnum},     "bioghist",        "Biographische Notiz" );
+    simpletag_p( $f555{$sysnum},     "otherfindaid",    "Weitere Findmittel" );
+    simpletag_p( $f561{$sysnum},     "custodhist",      "Angaben zur Herkunft" );
 
-    if ( @{ $bibliography{$sysnum} } > 0 ) {
-
-        $writer->startTag("bibliography");
-        $writer->startTag("head");
-        $writer->characters("Bibliographie");
-        $writer->endTag("head");
-
-        foreach my $i ( 0 .. ( @{ $bibliography{$sysnum} } - 1 ) ) {
-            $writer->startTag("bibref");
-            $writer->characters( $bibliography{$sysnum}[$i] );
-            $writer->endTag("bibref");
-        }
-        $writer->endTag("bibliography");
-    }
-
-    if ( @{ $literatur{$sysnum} } > 0 ) {
-        $writer->startTag("bibliography");
-        $writer->startTag("head");
-        $writer->characters("Literaturhinweise");
-        $writer->endTag("head");
-
-        foreach my $i ( 0 .. ( @{ $literatur{$sysnum} } - 1 ) ) {
-            $writer->startTag("bibref");
-            $writer->characters( $literatur{$sysnum}[$i] );
-            $writer->endTag("bibref");
-        }
-        $writer->endTag("bibliography");
-    }
-
-    simpletag_p( $acqinfo{$sysnum}, "acqinfo", "Akzession" );
-
-    if ( @{ $relatedmat{$sysnum} } > 0 ) {
-        $writer->startTag("relatedmaterial");
-        $writer->startTag("head");
-        $writer->characters("Verwandte Verzeichnungseinheiten");
-        $writer->endTag("head");
-        foreach my $i ( 0 .. ( @{ $relatedmat{$sysnum} } - 1 ) ) {
-            $writer->startTag("p");
-            $writer->characters( $relatedmat{$sysnum}[$i] );
-            $writer->endTag("p");
-        }
-        $writer->endTag("relatedmaterial");
-    }
-
-    simpletag_p( $bioghist{$sysnum},   "bioghist",     "Biographische Notiz" );
-    simpletag_p( $findaid{$sysnum},    "otherfindaid", "Weitere Findmittel" );
-    simpletag_p( $custodhist{$sysnum}, "custodhist",   "Angaben zur Herkunft" );
-
+    #Write controlacess element for persons, if there are 600 or 700 fields present (except 700$e=Aktenbildner fields)
     if (
-        ( @{ $controlper{$sysnum} } > 0 )
-        || ( @{ $nebenper{$sysnum} } > 0
-            && !( 'Aktenbildner' ~~ @{ $nebenperrelator{$sysnum} } ) )
+        ( @{ $f600{$sysnum} } > 0 )
+        || ( @{ $f700{$sysnum} } > 0 && !( 'Aktenbildner' ~~ @{ $f700e{$sysnum} } ) )
       )
     {
         $writer->startTag("controlaccess");
@@ -1420,73 +1396,79 @@ sub ead {
         $writer->characters('Personen');
         $writer->endTag("head");
 
-        foreach my $i ( 0 .. ( @{ $controlper{$sysnum} } - 1 ) ) {
-            if ( $controlperfamily{$sysnum}[$i] =~ /Familie/ ) {
-                if ( $controlpergnd{$sysnum}[$i] ne "" ) {
+        # Special case for 600 fields with 600$c=Familie
+        foreach my $i ( 0 .. ( @{ $f600{$sysnum} } - 1 ) ) {
+            if ( $f600c{$sysnum}[$i] =~ /Familie/ ) {
+                # Depending whether the 600 field has a GND-link we treat the field differently
+                if ( $f6001{$sysnum}[$i] ne "" ) {
                     $writer->startTag(
                         "persname",
                         "role"           => "Erwähnte Familie",
-                        "normal"         => $controlpernorm{$sysnum}[$i],
+                        "normal"         => $f600a{$sysnum}[$i],
                         "source"         => "GND",
-                        "authfilenumber" => "$controlpergnd{$sysnum}[$i]"
+                        "authfilenumber" => "$f6001{$sysnum}[$i]"
                     );
-                    $writer->characters( $controlper{$sysnum}[$i] );
+                    $writer->characters( $f600{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
                 else {
                     $writer->startTag(
                         "persname",
                         "role"   => "Erwähnte Familie",
-                        "normal" => $controlpernorm{$sysnum}[$i]
+                        "normal" => $f600a{$sysnum}[$i]
                     );
-                    $writer->characters( $controlper{$sysnum}[$i] );
+                    $writer->characters( $f600{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
             }
+            # Normal persons in 600 fields
             else {
-                if ( $controlpergnd{$sysnum}[$i] ne "" ) {
+                # Depending whether the 600 field has a GND-link we treat the field differently
+                if ( $f6001{$sysnum}[$i] ne "" ) {
                     $writer->startTag(
                         "persname",
                         "role"           => "Erwähnte Person",
-                        "normal"         => $controlpernorm{$sysnum}[$i],
+                        "normal"         => $f600a{$sysnum}[$i],
                         "source"         => "GND",
-                        "authfilenumber" => "$controlpergnd{$sysnum}[$i]"
+                        "authfilenumber" => "$f6001{$sysnum}[$i]"
                     );
-                    $writer->characters( $controlper{$sysnum}[$i] );
+                    $writer->characters( $f600{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
                 else {
                     $writer->startTag(
                         "persname",
                         "role"   => "Erwähnte Person",
-                        "normal" => $controlpernorm{$sysnum}[$i]
+                        "normal" => $f600a{$sysnum}[$i]
                     );
-                    $writer->characters( $controlper{$sysnum}[$i] );
+                    $writer->characters( $f600{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
             }
         }
 
-        foreach my $i ( 0 .. ( @{ $nebenper{$sysnum} } - 1 ) ) {
-            unless ( $nebenperrelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-                if ( $nebenpergnd{$sysnum}[$i] ne "" ) {
+        # Normal persons in 700 fields
+        foreach my $i ( 0 .. ( @{ $f700{$sysnum} } - 1 ) ) {
+            unless ( $f700e{$sysnum}[$i] eq 'Aktenbildner' ) {
+                # Depending whether the 700 field has a GND-link we treat the field differently
+                if ( $f7001{$sysnum}[$i] ne "" ) {
                     $writer->startTag(
                         "persname",
-                        "normal"         => $nebenpernorm{$sysnum}[$i],
+                        "normal"         => $f700a{$sysnum}[$i],
                         "source"         => "GND",
-                        "authfilenumber" => "$nebenpergnd{$sysnum}[$i]",
-                        "role"           => $nebenperrelator{$sysnum}[$i]
+                        "authfilenumber" => "$f7001{$sysnum}[$i]",
+                        "role"           => $f700e{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenper{$sysnum}[$i] );
+                    $writer->characters( $f700{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
                 else {
                     $writer->startTag(
                         "persname",
-                        "normal" => $nebenpernorm{$sysnum}[$i],
-                        "role"   => $nebenperrelator{$sysnum}[$i]
+                        "normal" => $f700a{$sysnum}[$i],
+                        "role"   => $f700e{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenper{$sysnum}[$i] );
+                    $writer->characters( $f700{$sysnum}[$i] );
                     $writer->endTag("persname");
                 }
             }
@@ -1495,13 +1477,12 @@ sub ead {
         $writer->endTag("controlaccess");
     }
 
+    #Write controlacess element for coorporations and conferences, if there are 610, 611, 710 or 711 fields present (except 700$e/710$j=Aktenbildner fields)
     if (
-           ( @{ $controlkorp{$sysnum} } > 0 )
-        || ( @{ $controlkong{$sysnum} } > 0 )
-        || ( @{ $nebenkorp{$sysnum} } > 0
-            && !( 'Aktenbildner' ~~ @{ $nebenkorprelator{$sysnum} } ) )
-        || ( @{ $nebenkong{$sysnum} } > 0
-            && !( 'Aktenbildner' ~~ @{ $nebenkongrelator{$sysnum} } ) )
+           ( @{ $f610{$sysnum} } > 0 )
+        || ( @{ $f611{$sysnum} } > 0 )
+        || ( @{ $f710{$sysnum} } > 0 && !( 'Aktenbildner' ~~ @{ $f710e{$sysnum} } ) )
+        || ( @{ $f711{$sysnum} } > 0 && !( 'Aktenbildner' ~~ @{ $f711j{$sysnum} } ) )
       )
     {
         $writer->startTag("controlaccess");
@@ -1510,97 +1491,105 @@ sub ead {
         $writer->characters('Körperschaften');
         $writer->endTag("head");
 
-        foreach my $i ( 0 .. ( @{ $controlkorp{$sysnum} } - 1 ) ) {
-            if ( $controlkorpgnd{$sysnum}[$i] ne "" ) {
+        # Coorporation in field 610
+        foreach my $i ( 0 .. ( @{ $f610{$sysnum} } - 1 ) ) {
+            # Depending whether the 610 field has a GND-link we treat the field differently
+            if ( $f6101{$sysnum}[$i] ne "" ) {
                 $writer->startTag(
                     "corpname",
                     "role"           => "Erwähnte Körperschaft",
-                    "normal"         => $controlkorpnorm{$sysnum}[$i],
+                    "normal"         => $f610a{$sysnum}[$i],
                     "source"         => "GND",
-                    "authfilenumber" => "$controlkorpgnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f6101{$sysnum}[$i]"
                 );
-                $writer->characters( $controlkorp{$sysnum}[$i] );
+                $writer->characters( $f610{$sysnum}[$i] );
                 $writer->endTag("corpname");
             }
             else {
                 $writer->startTag(
                     "corpname",
                     "role"   => "Erwähnte Körperschaft",
-                    "normal" => $controlkorpnorm{$sysnum}[$i]
+                    "normal" => $f610a{$sysnum}[$i]
                 );
-                $writer->characters( $controlkorp{$sysnum}[$i] );
+                $writer->characters( $f610{$sysnum}[$i] );
                 $writer->endTag("corpname");
             }
         }
 
-        foreach my $i ( 0 .. ( @{ $nebenkorp{$sysnum} } - 1 ) ) {
-            unless ( $nebenkorprelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-                if ( $nebenkorpgnd{$sysnum}[$i] ne "" ) {
+        # Coorporation in field 710
+        foreach my $i ( 0 .. ( @{ $f710{$sysnum} } - 1 ) ) {
+            unless ( $f710e{$sysnum}[$i] eq 'Aktenbildner' ) {
+                # Depending whether the 710 field has a GND-link we treat the field differently
+                if ( $f7101{$sysnum}[$i] ne "" ) {
                     $writer->startTag(
                         "corpname",
-                        "normal"         => $nebenkorpnorm{$sysnum}[$i],
+                        "normal"         => $f710a{$sysnum}[$i],
                         "source"         => "GND",
-                        "authfilenumber" => "$nebenkorpgnd{$sysnum}[$i]",
-                        "role"           => $nebenkorprelator{$sysnum}[$i]
+                        "authfilenumber" => "$f7101{$sysnum}[$i]",
+                        "role"           => $f710e{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenkorp{$sysnum}[$i] );
+                    $writer->characters( $f710{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
                 else {
                     $writer->startTag(
                         "corpname",
-                        "normal" => $nebenkorpnorm{$sysnum}[$i],
-                        "role"   => $nebenkorprelator{$sysnum}[$i]
+                        "normal" => $f710a{$sysnum}[$i],
+                        "role"   => $f710e{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenkorp{$sysnum}[$i] );
+                    $writer->characters( $f710{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
             }
         }
 
-        foreach my $i ( 0 .. ( @{ $controlkong{$sysnum} } - 1 ) ) {
-            if ( $controlkonggnd{$sysnum}[$i] ne "" ) {
+        # Conference in field 611
+        foreach my $i ( 0 .. ( @{ $f611{$sysnum} } - 1 ) ) {
+            # Depending whether the 611 field has a GND-link we treat the field differently
+            if ( $f6111{$sysnum}[$i] ne "" ) {
                 $writer->startTag(
                     "corpname",
                     "role"           => "Erwähnte Körperschaft",
-                    "normal"         => $controlkongnorm{$sysnum}[$i],
+                    "normal"         => $f611a{$sysnum}[$i],
                     "source"         => "GND",
-                    "authfilenumber" => "$controlkonggnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f6111{$sysnum}[$i]"
                 );
-                $writer->characters( $controlkong{$sysnum}[$i] );
+                $writer->characters( $f611{$sysnum}[$i] );
                 $writer->endTag("corpname");
             }
             else {
                 $writer->startTag(
                     "corpname",
                     "role"   => "Erwähnte Körperschaft",
-                    "normal" => $controlkongnorm{$sysnum}[$i]
+                    "normal" => $f611a{$sysnum}[$i]
                 );
-                $writer->characters( $controlkong{$sysnum}[$i] );
+                $writer->characters( $f611{$sysnum}[$i] );
                 $writer->endTag("corpname");
             }
         }
 
-        foreach my $i ( 0 .. ( @{ $nebenkong{$sysnum} } - 1 ) ) {
-            unless ( $nebenkongrelator{$sysnum}[$i] eq 'Aktenbildner' ) {
-                if ( $nebenkonggnd{$sysnum}[$i] ne "" ) {
+        # Conference in field 711
+        foreach my $i ( 0 .. ( @{ $711{$sysnum} } - 1 ) ) {
+            unless ( $f711j{$sysnum}[$i] eq 'Aktenbildner' ) {
+                # Depending whether the 711 field has a GND-link we treat the field differently
+                if ( $f7111{$sysnum}[$i] ne "" ) {
                     $writer->startTag(
                         "corpname",
-                        "normal"         => $nebenkongnorm{$sysnum}[$i],
+                        "normal"         => $f711a{$sysnum}[$i],
                         "source"         => "GND",
-                        "authfilenumber" => "$nebenkonggnd{$sysnum}[$i]",
-                        "role"           => $nebenkongrelator{$sysnum}[$i]
+                        "authfilenumber" => "$f7111{$sysnum}[$i]",
+                        "role"           => $f711j{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenkong{$sysnum}[$i] );
+                    $writer->characters( $711{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
                 else {
                     $writer->startTag(
                         "corpname",
-                        "normal" => $nebenkongnorm{$sysnum}[$i],
-                        "role"   => $nebenkongrelator{$sysnum}[$i]
+                        "normal" => $f711a{$sysnum}[$i],
+                        "role"   => $f711j{$sysnum}[$i]
                     );
-                    $writer->characters( $nebenkong{$sysnum}[$i] );
+                    $writer->characters( $711{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
             }
@@ -1610,28 +1599,30 @@ sub ead {
 
     }
 
-    unless ( @{ $controlsub{$sysnum} } == 0 ) {
+    # Write controlaccess term for subject headings
+    unless ( @{ $f650{$sysnum} } == 0 ) {
         $writer->startTag("controlaccess");
 
         $writer->startTag("head");
         $writer->characters('Sachschlagwörter');
         $writer->endTag("head");
 
-        foreach my $i ( 0 .. ( @{ $controlsub{$sysnum} } - 1 ) ) {
-            if ( defined $controlsubgnd{$sysnum}[$i] ) {
+        foreach my $i ( 0 .. ( @{ $f650{$sysnum} } - 1 ) ) {
+            # Depending whether the 650 field has a GND-link we treat the field differently
+            if ( defined $f6501{$sysnum}[$i] ) {
                 $writer->startTag(
                     "subject",
-                    "normal"         => $controlsubnorm{$sysnum}[$i],
+                    "normal"         => $f650a{$sysnum}[$i],
                     "source"         => "GND",
-                    "authfilenumber" => "$controlsubgnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f6501{$sysnum}[$i]"
                 );
-                $writer->characters( $controlsub{$sysnum}[$i] );
+                $writer->characters( $f650{$sysnum}[$i] );
                 $writer->endTag("subject");
             }
             else {
                 $writer->startTag( "subject",
-                    "normal" => $controlsubnorm{$sysnum}[$i] );
-                $writer->characters( $controlsub{$sysnum}[$i] );
+                    "normal" => $f650a{$sysnum}[$i] );
+                $writer->characters( $f650{$sysnum}[$i] );
                 $writer->endTag("subject");
             }
         }
@@ -1640,8 +1631,9 @@ sub ead {
 
     }
 
-    unless ( ( @{ $controlgeo{$sysnum} } == 0 )
-        && ( @{ $originationa{$sysnum} } == 0 ) )
+    # Write controlaccess element for geographical places
+    unless ( ( @{ $f651{$sysnum} } == 0 )
+        && ( @{ $f751a{$sysnum} } == 0 ) )
     {
         $writer->startTag("controlaccess");
 
@@ -1649,62 +1641,67 @@ sub ead {
         $writer->characters('Orte');
         $writer->endTag("head");
 
-        foreach my $i ( 0 .. ( @{ $controlgeo{$sysnum} } - 1 ) ) {
-            if ( $controlgeognd{$sysnum}[$i] ne "" ) {
+        # Place in field 651
+        foreach my $i ( 0 .. ( @{ $f651{$sysnum} } - 1 ) ) {
+            # Depending whether the 651 field has a GND-link we treat the field differently
+            if ( $f6511{$sysnum}[$i] ne "" ) {
                 $writer->startTag(
                     "geogname",
                     "role"           => "Erwähnter Ort",
-                    "normal"         => $controlgeonorm{$sysnum}[$i],
+                    "normal"         => $f651a{$sysnum}[$i],
                     "source"         => "GND",
-                    "authfilenumber" => "$controlgeognd{$sysnum}[$i]"
+                    "authfilenumber" => "$f6511{$sysnum}[$i]"
                 );
-                $writer->characters( $controlgeo{$sysnum}[$i] );
+                $writer->characters( $f651{$sysnum}[$i] );
                 $writer->endTag("geogname");
             }
             else {
                 $writer->startTag(
                     "geogname",
                     "role"   => "Erwähnter Ort",
-                    "normal" => $controlgeonorm{$sysnum}[$i]
+                    "normal" => $f651a{$sysnum}[$i]
                 );
-                $writer->characters( $controlgeo{$sysnum}[$i] );
+                $writer->characters( $f651{$sysnum}[$i] );
                 $writer->endTag("geogname");
             }
         }
 
-        foreach my $i ( 0 .. ( @{ $originationa{$sysnum} } - 1 ) ) {
-            if ( $originationgnd{$sysnum}[$i] ne "" ) {
+        # Place in field 751
+        foreach my $i ( 0 .. ( @{ $f751a{$sysnum} } - 1 ) ) {
+            # Depending whether the 751 field has a GND-link we treat the field differently
+            if ( $f7511{$sysnum}[$i] ne "" ) {
                 $writer->startTag(
                     "geogname",
                     "role"           => "Entstehungsort",
-                    "normal"         => $originationa{$sysnum}[$i],
+                    "normal"         => $f751a{$sysnum}[$i],
                     "source"         => "GND",
-                    "authfilenumber" => "$originationgnd{$sysnum}[$i]"
+                    "authfilenumber" => "$f7511{$sysnum}[$i]"
                 );
-                $writer->characters( $originationa{$sysnum}[$i] );
+                $writer->characters( $f751a{$sysnum}[$i] );
                 $writer->endTag("geogname");
             }
             else {
                 $writer->startTag(
                     "geogname",
                     "role"   => "Entstehungsort",
-                    "normal" => $originationa{$sysnum}[$i]
+                    "normal" => $f751a{$sysnum}[$i]
                 );
-                $writer->characters( $originationa{$sysnum}[$i] );
+                $writer->characters( $f751a{$sysnum}[$i] );
                 $writer->endTag("geogname");
             }
         }
         $writer->endTag("controlaccess");
     }
 
-    unless ( @{ $controlgenre{$sysnum} } == 0 ) {
+    # Write controlaccess element for genre
+    unless ( @{ $f655{$sysnum} } == 0 ) {
         $writer->startTag("controlaccess");
 
         $writer->startTag("head");
         $writer->characters('Gattungen');
         $writer->endTag("head");
 
-        simpletag( $controlgenre{$sysnum}, "genreform" );
+        simpletag( $f655{$sysnum}, "genreform" );
 
         $writer->endTag("controlaccess");
     }
@@ -1717,6 +1714,7 @@ sub ead {
     $writer->startTag("list");
     $writer->startTag("item");
 
+    # Write first CAT-date (creation date)
     if ( hasvalue( $catdate{$sysnum}[0] ) ) {
         $writer->startTag(
             "date",
@@ -1727,6 +1725,7 @@ sub ead {
         $writer->endTag("date");
     }
 
+    # Write last CAT-date (last edit date)
     if ( hasvalue( $catdate{$sysnum}[-1] ) ) {
         $writer->startTag(
             "date",
@@ -1737,6 +1736,7 @@ sub ead {
         $writer->endTag("date");
     }
 
+    # Write syncronisation date = run daten of this script
     $writer->startTag(
         "date",
         "type"   => "Synchronisationsdatum",
@@ -1750,29 +1750,42 @@ sub ead {
 
     $writer->endTag("odd");
 
-    if ( $lvl{ $level{$sysnum} } eq "archdesc" ) {
+    # Write dsc tag for childern (only if the level of the present record = Bestand
+    if ( $lvl{ $f351c{$sysnum} } eq "archdesc" ) {
         $writer->startTag("dsc");
     }
 
-    #print $level{$sysnum} . "\n";
+    # Run the addchildren subroutine to find and convert childern records (based on 490/773 linking fields)
 
     addchildren($sysnum);
 
-    if ( $lvl{ $level{$sysnum} } eq "archdesc" ) {
+    # Close dsc tag for childern (only if the level of the present record = Bestand
+    if ( $lvl{ $f351c{$sysnum} } eq "archdesc" ) {
         $writer->endTag("dsc");
     }
 
-    $writer->endTag( $lvl{ $level{$sysnum} } );
+    # Close archdesc or c element
+    $writer->endTag( $lvl{ $f351c{$sysnum} } );
 
 }
-
+# Sub to find and convert childern records
 sub addchildren {
-    for my $child ( keys %link ) {
-        if ( $link{$child} == $_[0] ) {
+    # Check for each record (=keys f490) if there is a record with the system number of the present record ($_[0]). If found, execute
+    # the ead sub for this record.
+    for my $child ( keys %f490 ) {
+        if ( $f490{$child} == $_[0] ) {
             ead($child);
         }
     }
 }
+
+# Adaption of the marc_map function of the Catmandu Projekt
+# If a repeated field is present, Catmandu only extracts the subfields into an array if they exist.
+# This causes a problem if we later want to combine different subfields with the isbd sub.
+# 1st field 700b   -> marc_map(700b) will create an array with 1 element, marc_map(700a) will do nothing
+# 2nd field 700ab  -> marc_map(700b) will add a second element to the array, marc_map(700a) will create an array with one element
+# If we now want to combine subfields a and b, we will combine subfield a of the second field with subfield b of the first
+# Solution (i.e. hack): Create an empty aray element even if no subfield is found.
 
 sub marc_map {
     my ( $data, $marc_path, %opts ) = @_;
@@ -1833,6 +1846,7 @@ sub marc_map {
                 }
             }
             if ( $found eq "false" ) {
+                # !!! The following line was changes from Catmandu. Pushes an empty string, if no subfield is found
                 push( @v, "" );
             }
         }
@@ -1885,9 +1899,5 @@ sub marc_map {
         return undef;
     }
 }
-
-#print Dumper @sysnum;
-#print Dumper \@sysnum;
-#print Dumper (\%level);
 
 exit;
