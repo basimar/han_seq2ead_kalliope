@@ -264,6 +264,7 @@
 					<xs:enumeration value="gre"/>
 					<xs:enumeration value="gre"/>
 					<xs:enumeration value="grn"/>
+					<xs:enumeration value="gsw"/>
 					<xs:enumeration value="guj"/>
 					<xs:enumeration value="gwi"/>
 					<xs:enumeration value="hai"/>

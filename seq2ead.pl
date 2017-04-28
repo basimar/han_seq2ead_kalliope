@@ -531,11 +531,10 @@ $importer->each(
             }
         }
 
-        # Split field 041 into separate language coes
-        my @langcodes;
-        my @f041 = $f041 =~ m/(...)/g;
+        # Split field 041 into separate language codes
+        my @langcodes = $f041 =~ m/(...)/g;
         # Remove first language codes (not necessary, as it is also present in field 008
-        shift @f041;
+        shift @langcodes;
         # Push language code from field 008 into langcodes array
         push @langcodes, $language008 unless $language008 =~ /(zxx|und)/;
 
@@ -547,6 +546,8 @@ $importer->each(
                     push @languages, $language{$lang1};
                 }
             }
+	    # Exception: Language code for Swiss German ("gsw") has to be replaced by "ger" due to bug in ead.xsd
+	    $_ =~ s/gsw/ger/g;
         }
 
         # Generate title-field from subfields

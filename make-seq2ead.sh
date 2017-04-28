@@ -8,11 +8,11 @@
 #
 # history:
 
-DO_TRANSFORM=1
+DO_TRANSFORM=0
 DO_SPLIT=1
 DO_FINISH=1
 
-HOME=/home/basil/catmandu/seq2ead/
+HOME=/home/basil/catmandu/han_seq2ead_kalliope/
 FILES=tmp/split/*
 
 LINE='------------------------------------------------'
