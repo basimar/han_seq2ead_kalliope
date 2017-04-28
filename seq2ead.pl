@@ -1597,7 +1597,7 @@ sub ead {
         }
 
         # Conference in field 711
-        foreach my $i ( 0 .. ( @{ $711{$sysnum} } - 1 ) ) {
+        foreach my $i ( 0 .. ( @{ $f711{$sysnum} } - 1 ) ) {
             unless ( $f711j{$sysnum}[$i] eq 'Aktenbildner' ) {
                 # Depending whether the 711 field has a GND-link we treat the field differently
                 if ( $f7111{$sysnum}[$i] ne "" ) {
@@ -1608,7 +1608,7 @@ sub ead {
                         "authfilenumber" => "$f7111{$sysnum}[$i]",
                         "role"           => $f711j{$sysnum}[$i]
                     );
-                    $writer->characters( $711{$sysnum}[$i] );
+                    $writer->characters( $f711{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
                 else {
@@ -1617,7 +1617,7 @@ sub ead {
                         "normal" => $f711a{$sysnum}[$i],
                         "role"   => $f711j{$sysnum}[$i]
                     );
-                    $writer->characters( $711{$sysnum}[$i] );
+                    $writer->characters( $f711{$sysnum}[$i] );
                     $writer->endTag("corpname");
                 }
             }
