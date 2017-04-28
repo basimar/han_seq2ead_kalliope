@@ -1001,58 +1001,93 @@ sub isbd {
     if ( hasvalue( $_[1] ) ) {
         $_[0] = $_[0] . $_[2] . $_[1] . $_[3];
     }
-}
+}   
 
 # Generates a simple ead-element:
-# Argument 0: element content
-# Argument 1: element tag
-# Argument 2: element argument name
-# Argument 3: element argument content
+# # Argument 0: element content
+# # Argument 1: element tag
+# # Argument 2: element argument name
+# # Argument 3: element argument content
 sub simpletag {
-    if ( defined $_[0] ) {
-        foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
+    if ( ref($_[0]) eq 'ARRAY') {
+        if ( @{ $_[0] } > 0 ) {
+            foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
+                $writer->startTag( $_[1], $_[2] => $_[3] );
+                $writer->characters( $_[0][$i] );
+                $writer->endTag( $_[1] );
+            }
+        }
+    } else {
+        if (hasvalue($_[0])) {
             $writer->startTag( $_[1], $_[2] => $_[3] );
-            $writer->characters( $_[0][$i] );
+            $writer->characters( $_[0] );
             $writer->endTag( $_[1] );
         }
     }
 }
 
 # Generates an ead-element with head element and p-tags:
-# Argument 0: p-element content
-# Argument 1: element tag
-# Argument 2: head element content
+# # Argument 0: p-element content
+# # Argument 1: element tag
+# # Argument 2: head element content
 sub simpletag_p {
-    if ( @{ $_[0] } > 0 ) {
-        $writer->startTag( $_[1] );
-        $writer->startTag("head");
-        $writer->characters( $_[2] );
-        $writer->endTag("head");
-        foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
-            $writer->startTag("p");
-            $writer->characters( $_[0][$i] );
-            $writer->endTag("p");
+    if ( ref($_[0]) eq 'ARRAY') {
+        if ( @{ $_[0] } > 0 ) {
+            $writer->startTag( $_[1] );
+            $writer->startTag("head");
+            $writer->characters( $_[2] );
+            $writer->endTag("head");
+            foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
+                $writer->startTag("p");
+                $writer->characters( $_[0][$i] );
+                $writer->endTag("p");
+	    }
+	    $writer->endTag( $_[1] );
         }
-        $writer->endTag( $_[1] );
+    } else {
+        if (hasvalue($_[0])) {
+            $writer->startTag( $_[1] );
+            $writer->startTag("head");
+            $writer->characters( $_[2] );
+            $writer->endTag("head");
+            $writer->startTag("p");
+            $writer->characters( $_[0] );
+	    $writer->endTag("p");
+	    $writer->endTag( $_[1] );
+        }
     }
 }
+
 
 # Generates an ead-element with head element and bibref-tags:
 # Argument 0: bibref-element content
 # Argument 1: element tag
 # Argument 2: head element content
 sub simpletag_b {
-    if ( @{ $_[0] } > 0 ) {
-        $writer->startTag( $_[1] );
-        $writer->startTag("head");
-        $writer->characters( $_[2] );
-        $writer->endTag("head");
-        foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
-            $writer->startTag("bibref");
-            $writer->characters( $_[0][$i] );
-            $writer->endTag("bibref");
+    if ( ref($_[0]) eq 'ARRAY') {
+        if ( @{ $_[0] } > 0 ) {
+            $writer->startTag( $_[1] );
+            $writer->startTag("head");
+            $writer->characters( $_[2] );
+            $writer->endTag("head");
+            foreach my $i ( 0 .. ( @{ $_[0] } - 1 ) ) {
+                $writer->startTag("bibref");
+                $writer->characters( $_[0][$i] );
+                $writer->endTag("bibref");
+	    }
+	    $writer->endTag( $_[1] );
         }
-        $writer->endTag( $_[1] );
+    } else {
+        if (hasvalue($_[0])) {
+            $writer->startTag( $_[1] );
+            $writer->startTag("head");
+            $writer->characters( $_[2] );
+            $writer->endTag("head");
+            $writer->startTag("bibref");
+            $writer->characters( $_[0] );
+	    $writer->endTag("bibref");
+	    $writer->endTag( $_[1] );
+        }
     }
 }
 
