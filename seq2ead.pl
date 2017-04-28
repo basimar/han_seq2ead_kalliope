@@ -391,19 +391,11 @@ $importer->each(
         my @catdate         = marc_map( $data, 'CATc' );
 
         # If 008 date fields contain four "u" or "-", empty them
-        if ( $date0081 eq '----' ) {
+        if (( $date0081 eq '----') || ($date0081 eq 'uuuu') || ($date0081 =~ /[0-9]{2}uu/)) {
             $date0081 = '';
         }
 
-        if ( $date0082 eq '----' ) {
-            $date0082 = '';
-        }
-
-        if ( $date0081 eq 'uuuu' ) {
-            $date0081 = '';
-        }
-
-        if ( $date0082 eq 'uuuu' ) {
+        if (( $date0082 eq '----') || ($date0082 eq 'uuuu') || ($date0082 =~ /[0-9]{2}uu/)) {
             $date0082 = '';
         }
 
