@@ -539,7 +539,7 @@ $importer->each(
                 }
             }
 	    # Exception: Language code for Swiss German ("gsw") has to be replaced by "ger" due to bug in ead.xsd
-	    $_ =~ s/gsw/ger/g;
+	    s/gsw/ger/g;
         }
 
         # Generate title-field from subfields
@@ -1205,7 +1205,8 @@ sub ead {
         "corpname",
         "role"           => "Bestandshaltende Einrichtung",
         "normal"         => $f852a{$sysnum}[0],
-        "authfilenumber" => $isilnum{$sysnum}
+        "authfilenumber" => $isilnum{$sysnum},
+        "source"         => "ISIL" 
     );
     $writer->characters( $f852a{$sysnum}[0] );
     $writer->endTag("corpname");
