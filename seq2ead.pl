@@ -538,8 +538,11 @@ $importer->each(
                     push @languages, $language{$lang1};
                 }
             }
-	    # Exception: Language code for Swiss German ("gsw") has to be replaced by "ger" due to bug in ead.xsd
-	    s/gsw/ger/g;
+        }
+        
+        # Exception: Language code for Swiss German ("gsw") has to be replaced by "ger" due to bug in ead.xsd
+	for my $i ( 0 .. (@langcodes) - 1 ) {
+	    $langcodes[$i] = "ger" if $langcodes[$i] eq "gsw"
         }
 
         # Generate title-field from subfields

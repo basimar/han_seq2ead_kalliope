@@ -49,7 +49,7 @@ while (my $line = <$eaddata>) {
     if ($line =~ /<corpname role="Bestandshaltende Einrichtung"/) {
         $isil = $line;
 	chomp $isil;
-	$isil = substr($isil,-12,-1);
+	$isil = substr($isil,-26,-15);
     }
 
     if ($line =~ /<\/titleproper/ ) {
