@@ -304,9 +304,11 @@ $importer->each(
         my @f610a         = marc_map( $data, '610a' );
         my @f610b         = marc_map( $data, '610b', '-join', ', ' );
         my @f6101         = marc_map( $data, '6101' );
+        my @f610g         = marc_map( $data, '610g' );
         my @f611a         = marc_map( $data, '611a' );
         my @f611e         = marc_map( $data, '611e', '-join', ', ' );
         my @f6111         = marc_map( $data, '6111' );
+        my @f611g         = marc_map( $data, '611g' );
         my @f650a         = marc_map( $data, '650[ 7]a' );
         my @f650v         = marc_map( $data, '650[ 7]v', '-join', ', ' );
         my @f650x         = marc_map( $data, '650[ 7]x', '-join', ', ' );
@@ -339,10 +341,12 @@ $importer->each(
         my @f710b         = marc_map( $data, '710b', '-join', ', ' );
         my @f7101         = marc_map( $data, '7101' );
         my @f710e         = marc_map( $data, '710e' );
+        my @f710g         = marc_map( $data, '710g' );
         my @f711a         = marc_map( $data, '711a' );
         my @f711e         = marc_map( $data, '711e', '-join', ', ' );
         my @f7111         = marc_map( $data, '7111' );
         my @f711j         = marc_map( $data, '711j' );
+        my @f711g         = marc_map( $data, '711g' );
 
         #Fields 100, 110 and 111 are treated like 7##-fields and are therefore shifted into these arrays
         if ( marc_map( $data, '100' ) ne "" ) {
@@ -367,6 +371,7 @@ $importer->each(
             unshift @f710a,       marc_map( $data, '110a' );
             unshift @f710b,       marc_map( $data, '110b', '-join', ', ' );
             unshift @f710e,       marc_map( $data, '110e' );
+            unshift @f710g,       marc_map( $data, '110g' );
             unshift @f7101,       marc_map( $data, '1101' );
         }
 
@@ -375,6 +380,7 @@ $importer->each(
             unshift @f711e,       marc_map( $data, '111e', '-join', ', ' );
             unshift @f7111,       marc_map( $data, '1111' );
             unshift @f711j,       marc_map( $data, '111j' );
+            unshift @f711g,       marc_map( $data, '111g' );
         }
 
         my @f751a           = marc_map( $data, '751a' );
@@ -696,6 +702,7 @@ $importer->each(
         for my $i ( 0 .. ($f610_max) - 1 ) {
             $f610[$i] = $f610a[$i];
             isbd( $f610[$i], $f610b[$i], ". " );
+            isbd( $f610[$i], $f610g[$i], " (", ")" );
         }
 
         # Generate a subject field (conferences) from the field 611 subfields
@@ -705,6 +712,7 @@ $importer->each(
         for my $i ( 0 .. ($f611_max) - 1 ) {
             $f611[$i] = $f611a[$i];
             isbd( $f611[$i], $f611e[$i], ". " );
+            isbd( $f611[$i], $f611g[$i], " (", ")" );
         }
 
         # Generate a subject field (subject terms) from the field 650 subfields
@@ -764,19 +772,21 @@ $importer->each(
         # Generate an author field from the 710 and 110 subfields
         for (@f7101) { s/\(DE-588\)//g }
         my @f710;
-        my $f710_max = maxarray( \@f710a, \@f710b );
+        my $f710_max = maxarray( \@f710a, \@f710b, \@f710g );
         for my $i ( 0 .. ($f710_max) - 1 ) {
             $f710[$i] = $f710a[$i];
             isbd( $f710[$i], $f710b[$i], ". " );
+            isbd( $f710[$i], $f710g[$i], " (", ")" );
         }
 
         # Generate an author field from the 711 and 111 subfields
         for (@f7111) { s/\(DE-588\)//g }
         my @f711;
-        my $f711_max = maxarray( \@f711a, \@f711e );
+        my $f711_max = maxarray( \@f711a, \@f711e, \@f711g );
         for my $i ( 0 .. ($f711_max) - 1 ) {
             $f711[$i] = $f711a[$i];
             isbd( $f711[$i], $f711e[$i], ". " );
+            isbd( $f711[$i], $f711g[$i], " (", ")" );
         }
 
         # Replace MARC relator codes (fields 700$e, 710$e and 711$j with ead codes
