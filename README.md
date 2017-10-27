@@ -14,3 +14,4 @@ OUTPUT: The generated ead-files will be saved in ./output/validation (if they va
 
 How to run this script: Execute make-seq2ead.sh
 
+Requirements: Catmandu Perl-Modules (from cpan) and libxml2-utils and xsltproc linux packages.
