@@ -76,16 +76,17 @@ my %lvlarg = (
 
 # Hash with concordance 852$a and ISIL
 my %isil = (
-    'Rorschach'        => 'CH-000956-2',
-    'Gosteli'          => 'CH-000924-9',
-    'Ausserrhoden'     => 'CH-000095-1',
-    'Vadiana'          => 'CH-000009-3',
-    'SWA'              => 'CH-000133-4',
-    'Thurgau'          => 'CH-000086-2',
-    'Stiftsbibliothek' => 'CH-000093-7',
-    'UBHandschriften'  => 'CH-000004-7',
-    'Solothurn'        => 'CH-000045-X',
-    'Luzern'           => 'CH-000006-1'
+    'Rorschach'           => 'CH-000956-2',
+    'Gosteli'             => 'CH-000924-9',
+    'Ausserrhoden'        => 'CH-000095-1',
+    'Vadiana'             => 'CH-000009-3',
+    'SWA'                 => 'CH-000133-4',
+    'Thurgau'             => 'CH-000086-2',
+    'Stiftsbibliothek'    => 'CH-000093-7',
+    'UBHandschriften'     => 'CH-000004-7',
+    'Solothurn'           => 'CH-000045-X',
+    'Luzern'              => 'CH-000006-1',
+    'Osteuropabibliothek' => 'CH-000284-9'
 );
 
 # Hash with concordance MARC21 relator codes and ead relator codes
@@ -980,6 +981,9 @@ foreach (@sysnum) {
         }
         elsif ( $f852{$_} =~ /Stiftsbibliothek/ ) {
             $f490{$_} = '000297412' unless $_ == '000297412';
+        }
+        elsif ( $f852{$_} =~ /Osteuropabibliothek/ ) {
+            $f490{$_} = '000324579' unless $_ == '000324579';
         }
     }
 }
