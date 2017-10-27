@@ -9,6 +9,7 @@ In order to run these scripts the following folders have to be created
 ./output/no_validation
 
 INPUT: Complete export of the HAN catalogue in Aleph sequential format, stored as dsv05.seq in ./inputA
+
 OUTPUT: The generated ead-files will be saved in ./output/validation (if they validate against the ead.xsd file)
         or in ./output/no_validation if they do not validate.
 
