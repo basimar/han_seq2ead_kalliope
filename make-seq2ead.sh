@@ -8,11 +8,12 @@
 #
 # history:
 
+DO_DOWNLOAD=1
 DO_TRANSFORM=1
 DO_SPLIT=1
 DO_FINISH=1
 
-HOME=/home/basil/catmandu/han_seq2ead_kalliope/
+HOME=/home/basil/han_seq2ead_kalliope/
 FILES=tmp/split/*
 
 LINE='------------------------------------------------'
@@ -25,6 +26,13 @@ echo $LINE
 echo $LINE
 
 cd $HOME
+
+if [ "$DO_DOWNLOAD" == "1" ]; then
+    echo $LINE
+    echo "*Downloading DSV05 data from Aleph-Server" 
+    echo $LINE
+    ./download-dsv05-sequential.sh 
+fi
 
 if [ "$DO_TRANSFORM" == "1" ]; then
     echo $LINE
