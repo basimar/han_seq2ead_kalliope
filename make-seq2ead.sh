@@ -9,9 +9,9 @@
 # history:
 
 DO_DOWNLOAD=1
-DO_TRANSFORM=0
-DO_SPLIT=0
-DO_FINISH=0
+DO_TRANSFORM=1
+DO_SPLIT=1
+DO_FINISH=1
 
 HOME=/home/basil/han_seq2ead_kalliope/
 FILES=tmp/split/*

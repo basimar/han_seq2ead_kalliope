@@ -76,17 +76,17 @@ my %lvlarg = (
 
 # Hash with concordance 852$a and ISIL
 my %isil = (
-    'Rorschach'           => 'CH-000956-2',
-    'Gosteli'             => 'CH-000924-9',
-    'Ausserrhoden'        => 'CH-000095-1',
-    'Vadiana'             => 'CH-000009-3',
-    'SWA'                 => 'CH-000133-4',
-    'Thurgau'             => 'CH-000086-2',
-    'Stiftsbibliothek'    => 'CH-000093-7',
-    'UBHandschriften'     => 'CH-000004-7',
-    'Solothurn'           => 'CH-000045-X',
-    'Luzern'              => 'CH-000006-1',
-    'Osteuropabibliothek' => 'CH-000284-9'
+    'Bern UB Medizingeschichte: Rorschach-Archiv' => 'CH-000956-2',
+    'Bern Gosteli-Archiv'                         => 'CH-000924-9',
+    'KB Appenzell Ausserrhoden'                   => 'CH-000095-1',
+    'St. Gallen KB Vadiana'                       => 'CH-000009-3',
+    'Basel UB Wirtschaft - SWA'                   => 'CH-000133-4',
+    'KB Thurgau'                                  => 'CH-000086-2',
+    'St. Gallen Stiftsbibliothek'                 => 'CH-000093-7',
+    'Basel UB'                                    => 'CH-000004-7',
+    'Solothurn ZB'                                => 'CH-000045-X',
+    'Luzern ZHB'                                  => 'CH-000006-1',
+    'Bern UB Schweizerische Osteuropabibliothek'  => 'CH-000284-9'
 );
 
 # Hash with concordance MARC21 relator codes and ead relator codes
@@ -818,7 +818,7 @@ $importer->each(
         # Set ISIL of the institution based on the 852 field
         my $isilnum;
         for my $isil ( keys %isil ) {
-            if ( $f852 =~ $isil ) {
+            if ( $f852a[0] eq $isil ) {
                 $isilnum = $isil{$isil};
             }
         }
@@ -846,11 +846,11 @@ $importer->each(
                   ( $f909 =~ /hide_this/ )
                || ( $f351c =~ /Abteilung/ )
                || ( $f351c =~ /Hauptabteilung/ )
-               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /UBHandschriften/ )
-               || ( $f909 =~ /collect_this.miszellan/ && $f852 =~ /UBHandschriften/ )
-               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /Luzern.ZHB/ )
-               || ( $f909 =~ /collect_this.handschrift/ && $f852 =~ /Vadiana/ )
-               || ( $f852 =~ /REBUS/ )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'Basel UB' )
+               || ( $f909 =~ /collect_this.miszellan/ && $f852a[0] eq 'Basel UB' )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'Luzern ZHB')
+               || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'St. Gallen KB Vadiana')
+               || ( $f852a[0] eq 'Bern UB Archives REBUS' )
         )
         {
             # If a record has to be exported, we read in its field (already manipulated) into hashes (key = sysnum)
