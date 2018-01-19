@@ -198,7 +198,7 @@ my (
     %date008,          %date008_hum,     %f046,
     %f046_hum,         %f245,            %f246,
     %f246i,            %f250,            %f254,
-    %f260,             %f300,            %f300c,
+    %f264,             %f300,            %f300c,
     %f340,             %f351a,           %f351c,
     %f490,             %f500,            %f505,
     %f506,             %f510,            %f520,
@@ -245,18 +245,13 @@ $importer->each(
         my $f245a         = marc_map( $data, '245a' );
         my $f245b         = marc_map( $data, '245b', '-join', ', ' );
         my $f245c         = marc_map( $data, '245c', '-join', ', ' );
-        my $f245d         = marc_map( $data, '245d', '-join', ', ' );
-        my $f245i         = marc_map( $data, '245i', '-join', ', ' );
-        my $f245j         = marc_map( $data, '245j', '-join', ', ' );
-        my $f245n         = marc_map( $data, '245n', '-join', ', ' );
-        my $f245p         = marc_map( $data, '245p', '-join', ', ' );
         my @f246a         = marc_map( $data, '246a' );
         my @f246n         = marc_map( $data, '246n', '-join', ', ' );
         my @f246p         = marc_map( $data, '246p', '-join', ', ' );
         my @f246i         = marc_map( $data, '246i' );
         my $f250          = marc_map( $data, '250a' );
         my @f254          = marc_map( $data, '254a' );
-        my $f260          = marc_map( $data, '260c' );
+        my $f264          = marc_map( $data, '264c' );
         my $f300a         = marc_map( $data, '300a', '-join', ', ' );
         my $f300e         = marc_map( $data, '300e' );
         my $f300c         = marc_map( $data, '300c', '-join', ', ' );
@@ -329,6 +324,7 @@ $importer->each(
         my @f700c         = marc_map( $data, '700c', '-join', ', ' );
         my @f700d         = marc_map( $data, '700d' );
         my @f700e         = marc_map( $data, '700e' );
+        my @f700l         = marc_map( $data, '700l' );
         my @f700t         = marc_map( $data, '700t' );
         my @f700n         = marc_map( $data, '700n', '-join', ', ' );
         my @f700p         = marc_map( $data, '700p', '-join', ', ' );
@@ -358,6 +354,7 @@ $importer->each(
             unshift @f700d,       marc_map( $data, '100d' );
             unshift @f700e,       marc_map( $data, '100e' );
             unshift @f700t,       undef;
+            unshift @f700l,       undef;
             unshift @f700n,       undef;
             unshift @f700p,       undef;
             unshift @f700m,       undef;
@@ -548,19 +545,14 @@ $importer->each(
         }
         
         # Exception: Language code for Swiss German ("gsw") has to be replaced by "ger" due to bug in ead.xsd
-	for my $i ( 0 .. (@langcodes) - 1 ) {
-	    $langcodes[$i] = "ger" if $langcodes[$i] eq "gsw"
+        for my $i ( 0 .. (@langcodes) - 1 ) {
+	        $langcodes[$i] = "ger" if $langcodes[$i] eq "gsw"
         }
 
         # Generate title-field from subfields
         my $f245 = $f245a;
         isbd( $f245, $f245b, " : " );
-        isbd( $f245, $f245d, " = " );
         isbd( $f245, $f245c, " / " );
-        isbd( $f245, $f245i, " ; " );
-        isbd( $f245, $f245j, ". " );
-        isbd( $f245, $f245n, ". " );
-        isbd( $f245, $f245p, ". " );
 
         # Set 246$i = "Weiterer Titel" if $i does not exist
         for my $i ( 0 .. (@f246a) - 1 ) {
@@ -751,8 +743,8 @@ $importer->each(
         my @f700;
         my $f700_max = maxarray(
             \@f700a, \@f700q, \@f700b, \@f700c, \@f700d,
-            \@f700t, \@f700n, \@f700p, \@f700m, \@f700r,
-            \@f700s, \@f700o, \@f700h
+            \@f700t, \@f700l, \@f700n, \@f700p, \@f700m,
+            \@f700r, \@f700s, \@f700o, \@f700h
         );
         for my $i ( 0 .. ($f700_max) - 1 ) {
             $f700[$i] = $f700a[$i];
@@ -763,6 +755,7 @@ $importer->each(
             isbd( $f700[$i], $f700t[$i], " -- " );
             isbd( $f700[$i], $f700n[$i], ". " );
             isbd( $f700[$i], $f700p[$i], ". " );
+            isbd( $f700[$i], $f700l[$i], ". " );
             isbd( $f700[$i], $f700m[$i], ". " );
             isbd( $f700[$i], $f700r[$i], ". " );
             isbd( $f700[$i], $f700s[$i], ". " );
@@ -864,7 +857,7 @@ $importer->each(
             $f246i{$sysnum}            = [@f246i];
             $f250{$sysnum}             = $f250;
             $f254{$sysnum}             = [@f254];
-            $f260{$sysnum}             = $f260;
+            $f264{$sysnum}             = $f264;
             $f300{$sysnum}             = $f300;
             $f300c{$sysnum}            = $f300c;
             $f340{$sysnum}             = [@f340];
@@ -1374,10 +1367,10 @@ sub ead {
         $writer->startTag("unitdate");
     }
 
-    # For the human readable date use field 260 (if present) else field 046 (if only one field 046 is present), else field 008
+    # For the human readable date use field 264 (if present) else field 046 (if only one field 046 is present), else field 008
 
-    if ( hasvalue( $f260{$sysnum} ) ) {
-        $writer->characters( $f260{$sysnum} );
+    if ( hasvalue( $f264{$sysnum} ) ) {
+        $writer->characters( $f264{$sysnum} );
     }
     elsif ( hasvalue( $f046_hum{$sysnum}[0] )
         && @{ $f046_hum{$sysnum} } == 1 )
