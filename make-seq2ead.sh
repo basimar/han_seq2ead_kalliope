@@ -13,7 +13,8 @@ DO_TRANSFORM=1
 DO_SPLIT=1
 DO_FINISH=1
 
-HOME=/home/basil/han_seq2ead_kalliope/
+HOME=/opt/scripts/han_seq2ead_kalliope/
+DATA=/opt/data/dsv05/
 FILES=tmp/split/*
 
 LINE='------------------------------------------------'
@@ -29,10 +30,14 @@ cd $HOME
 
 if [ "$DO_DOWNLOAD" == "1" ]; then
     echo $LINE
-    echo "*Downloading DSV05 data from Aleph-Server" 
+    echo "*Getting DSV05 data from Aleph-Server" 
     echo $LINE
-    ./download-dsv05-sequential.sh 
-    mv ./dsv05.seq input/
+
+    # Auskommentiert für Einsatz auf ub-catmandu
+    # ./download-dsv05-sequential.sh 
+    # mv ./dsv05.seq input/
+
+    mv $DATA/dsv05.seq $HOME/input/
 fi
 
 if [ "$DO_TRANSFORM" == "1" ]; then
