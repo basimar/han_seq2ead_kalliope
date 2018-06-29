@@ -81,12 +81,14 @@ my %isil = (
     'KB Appenzell Ausserrhoden'                   => 'CH-000095-1',
     'St. Gallen KB Vadiana'                       => 'CH-000009-3',
     'Basel UB Wirtschaft - SWA'                   => 'CH-000133-4',
+    'KB Aargau'                                   => 'CH-000050-X',
     'KB Thurgau'                                  => 'CH-000086-2',
     'St. Gallen Stiftsbibliothek'                 => 'CH-000093-7',
     'Basel UB'                                    => 'CH-000004-7',
     'Solothurn ZB'                                => 'CH-000045-X',
     'Luzern ZHB'                                  => 'CH-000006-1',
-    'Bern UB Schweizerische Osteuropabibliothek'  => 'CH-000284-9'
+    'Bern UB Schweizerische Osteuropabibliothek'  => 'CH-000284-9',
+    'Zofingen SB'                                 => 'CH-000048-1'
 );
 
 # Hash with concordance MARC21 relator codes and ead relator codes
@@ -841,6 +843,8 @@ $importer->each(
                || ( $f351c =~ /Hauptabteilung/ )
                || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'Basel UB' )
                || ( $f909 =~ /collect_this.miszellan/ && $f852a[0] eq 'Basel UB' )
+               || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'KB Aargau' )
+               || ( $f909 =~ /collect_this.miszellan/ && $f852a[0] eq 'KB Aargau' )
                || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'Luzern ZHB')
                || ( $f909 =~ /collect_this.handschrift/ && $f852a[0] eq 'St. Gallen KB Vadiana')
                || ( $f852a[0] eq 'Bern UB Archives REBUS' )
@@ -963,6 +967,9 @@ foreach (@sysnum) {
         elsif ( $f852{$_} =~ /Thurgau/ ) {
             $f490{$_} = '000297408' unless $_ == '000297408';
         }
+        elsif ( $f852{$_} =~ /Aargau/ ) {
+            $f490{$_} = '000336367' unless $_ == '000336367';
+        }
         elsif ( $f852{$_} =~ /Luzern/ ) {
             $f490{$_} = '000297409' unless $_ == '000297409';
         }
@@ -977,6 +984,9 @@ foreach (@sysnum) {
         }
         elsif ( $f852{$_} =~ /Osteuropabibliothek/ ) {
             $f490{$_} = '000324579' unless $_ == '000324579';
+        }
+        elsif ( $f852{$_} =~ /Zofingen/ ) {
+            $f490{$_} = '000336368' unless $_ == '000336368';
         }
     }
 }
