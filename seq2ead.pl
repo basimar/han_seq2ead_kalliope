@@ -88,6 +88,7 @@ my %isil = (
     'Solothurn ZB'                                => 'CH-000045-X',
     'Luzern ZHB'                                  => 'CH-000006-1',
     'Bern UB Schweizerische Osteuropabibliothek'  => 'CH-000284-9',
+    'Bern UB Bibliothek Münstergasse'             => 'CH-000011-1',
     'Zofingen SB'                                 => 'CH-000048-1'
 );
 
@@ -984,6 +985,9 @@ foreach (@sysnum) {
         }
         elsif ( $f852{$_} =~ /Osteuropabibliothek/ ) {
             $f490{$_} = '000324579' unless $_ == '000324579';
+        }
+        elsif ( $f852{$_} =~ /Münstergasse/ ) {
+            $f490{$_} = '000345931' unless $_ == '000345931';
         }
         elsif ( $f852{$_} =~ /Zofingen/ ) {
             $f490{$_} = '000336368' unless $_ == '000336368';
